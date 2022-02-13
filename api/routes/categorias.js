@@ -21,7 +21,7 @@ lista_categorias.set('Novela negra', {titulo: "Novela negra"});
 lista_categorias.set('Psicologia', {titulo: "Psicologia"});
 
 // Mostrar todas las categorías
-router.get('/', async function(pet, resp, next) {
+router.get('/', async function(pet, resp) {
     try {
         const categorias = await Categoria.find();
         resp.status(200);

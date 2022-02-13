@@ -20,7 +20,7 @@ lista_comentarios.set(1, {id: 1, titulo: "Libro apasionante", valoracion: 5, com
 lista_comentarios.set(2, {id: 2, titulo: "De otro nivel", valoracion: 4.5, comentario: "Recomendaría el libro a todo el mundo", libro: 4})
 
 // Mostrar todos los libros (se tendrá que hacer paginación)
-router.get('/', async function(pet, resp, next) {
+router.get('/', async function(pet, resp) {
     try {
         const libros = await Libro.find();
         resp.status(200);

@@ -1,5 +1,9 @@
+require('dotenv').config();
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
+
+const Autor = require('../models/autor');
 
 var lista = new Map();
 lista.set(1, {id: 1, titulo: "Por si las voces vuelven", precio: 17, autor: "Angel Martin", categoria: "Cine"});
@@ -17,11 +21,20 @@ lista_autores.set(4, {id: 4, nombre: "Jennifer Ackerman", biografia: "Esta es la
 lista_autores.set(5, {id: 5, nombre: "Clarissa Pinkola Estes", biografia: "Esta es la biografia de Clarissa Pinkola Estes"});
 
 // Todos los autores (habrá que hacer paginación)
-router.get('/', function(pet, resp, next) {
-    var datos_autores = Array.from(lista_autores.values());
-    resp.status(200);
-    resp.setHeader('Content-Type', 'application/json');
-    resp.send(datos_autores);
+router.get('/', async function(pet, resp) {
+    try {
+        const autores = await Autor.find();
+        resp.status(200);
+        resp.setHeader('Content-Type', 'application/json');
+        resp.send(autores);
+    } catch(err) {
+        resp.status(500);
+        resp.setHeader('Content-Type', 'application/json');
+        resp.send({
+            error: 6, 
+            mensaje: mensajes_error.get(6)
+        });
+    }
 });
 
 // Mostrar todos los datos de un autor, entre los que se incluyen sus libros
