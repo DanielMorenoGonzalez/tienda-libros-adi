@@ -14,3 +14,11 @@ Content-Type: application/json
 
 ###
 DELETE http://localhost:3000/api/libros/6208d304569658099d9c0d20
+
+###
+PATCH http://localhost:3000/api/libros/6208d36c991121bb364859c8
+Content-Type: application/json
+
+{
+    "precio": false
+}

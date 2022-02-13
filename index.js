@@ -33,7 +33,8 @@ global.mensajes_error = new Map([
     [4, 'Falta algún campo por rellenar'],
     [5, 'La palabra después del símbolo - no puede estar vacía'],
     [6, 'Error del servidor'],
-    [7, 'No es una cadena de texto']
+    [7, 'No es una cadena de texto'],
+    [8, 'No es un número']
 ]);
 
 //Este método delega en el server.listen "nativo" de Node

@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const { type } = require('express/lib/response');
 const res = require('express/lib/response');
 const router = express.Router();
 const mongoose = require('mongoose');
@@ -132,8 +133,7 @@ router.post('/', async function(pet, resp, next) {
 router.delete('/:id', getLibro, async function(pet, resp) {
     try {
         await resp.libro.remove();
-        resp.status(204);
-        resp.end();
+        resp.status(204).end();
     } catch(err) {
         resp.status(500);
         resp.setHeader('Content', 'application/json');
@@ -237,36 +237,33 @@ router.post('/:id/comentarios', function(pet, resp, next) {
     }
 });
 
-/*
-router.patch("/:id", function(pet, resp) {
-    var id = parseInt(pet.params.id)
-    if (!isNaN(id)) {
-        var item = lista.get(id)
-        if (item) {
-            var nombre = pet.body.nombre
-            var comprado = pet.body.comprado
-            if (nombre) {
-                item.nombre = nombre
-            }
-            if (comprado!=undefined) {
-                item.comprado = comprado
-            }
-            resp.status(204)
-            resp.end()
-            console.log(item)
+
+router.patch("/:id", getLibro, async function(pet, resp) {
+    if (pet.body.titulo != null) {
+        resp.libro.titulo = pet.body.titulo;
+    }
+    if (pet.body.precio != null) {
+        resp.libro.precio = pet.body.precio; 
+    }
+    
+    try {
+        const libroActualizado = await resp.libro.save();
+        resp.status(204).end();
+    } catch (err) {
+        if (isNaN(parseFloat(pet.body.precio))) {
+            resp.status(400).send({
+                error: 8,
+                mensaje: mensajes_error.get(8)
+            });
         }
         else {
-            resp.status(404)
-            resp.send({mensaje:"El item no existe"})
+            resp.status(400).send({
+                error: 7,
+                mensaje: mensajes_error.get(7)
+            });
         }
     }
-    else {
-        resp.status(400)
-        resp.send({mensaje:"el id debe ser numérico"})
-        
-    }
 });
-*/
 
 async function getLibro(pet, resp, next) {
     var libro;
