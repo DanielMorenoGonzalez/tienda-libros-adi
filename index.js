@@ -1,6 +1,5 @@
 var express = require('express');
 var morgan = require('morgan');
-//var config = require('./config.js');
 require('dotenv').config();
 var app = express();
 

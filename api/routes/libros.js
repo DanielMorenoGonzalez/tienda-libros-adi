@@ -1,7 +1,5 @@
 require('dotenv').config();
 const express = require('express');
-const { type } = require('express/lib/response');
-const res = require('express/lib/response');
 const router = express.Router();
 const mongoose = require('mongoose');
 
@@ -43,37 +41,6 @@ router.get('/:id', getLibro, function(pet, resp) {
     resp.status(200);
     resp.setHeader('Content-Type', 'application/json');
     resp.send(resp.libro);
-    /*
-    // Los parámetros HTTP se obtienen como cadenas, convertirlo a entero
-    var id = parseInt(pet.params.id);
-    // En caso de que el parámetro no sea numérico
-    if (isNaN(id)) {
-        resp.status(400);
-        resp.setHeader('Content-Type', 'application/json');
-        resp.send({
-            error: 2,
-            mensaje: mensajes_error.get(2)
-        })
-    }
-    else {
-        var obj = lista.get(id);
-        // En caso de no encontrar el libro
-        if (obj==undefined) {
-            resp.status(404);
-            resp.setHeader('Content-Type', 'application/json')
-            resp.send({
-                error: 1,
-                mensaje: mensajes_error.get(1)
-            })
-        }
-        else {
-            // Si se encuentra, se devuelve
-            resp.status(200);
-            resp.setHeader('Content-Type', 'application/json');
-            resp.send(obj);
-        }
-    }
-    */
 });
 
 // Añadir un libro

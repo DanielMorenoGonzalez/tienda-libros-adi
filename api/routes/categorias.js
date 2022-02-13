@@ -1,5 +1,9 @@
+require('dotenv').config();
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
+
+const Categoria = require('../models/categoria');
 
 var lista = new Map();
 lista.set(1, {id: 1, titulo: "Por si las voces vuelven", precio: 17, autor: "Angel Martin", categoria: "Cine"});
@@ -17,10 +21,20 @@ lista_categorias.set('Novela negra', {titulo: "Novela negra"});
 lista_categorias.set('Psicologia', {titulo: "Psicologia"});
 
 // Mostrar todas las categorías
-router.get('/', function(pet, resp, next) {
-    var datos = Array.from(lista_categorias.values());
-    resp.status(200);
-    resp.send(datos);
+router.get('/', async function(pet, resp, next) {
+    try {
+        const categorias = await Categoria.find();
+        resp.status(200);
+        resp.setHeader('Content-Type', 'application/json');
+        resp.send(categorias);
+    } catch(err) {
+        resp.status(500);
+        resp.setHeader('Content-Type', 'application/json');
+        resp.send({
+            error: 6, 
+            mensaje: mensajes_error.get(6)
+        });
+    }
 });
 
 // Mostrar todos los libros de una categoría

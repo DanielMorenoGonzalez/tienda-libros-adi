@@ -1,24 +1,16 @@
 GET http://localhost:3000/api/libros
 
 ###
-GET http://localhost:3000/api/libros/de
-
-###
-POST http://localhost:3000/api/libros
-Content-Type: application/json
-
-{
-    "titulo": "El mar",
-    "precio": 9.1
-}
-
-###
-DELETE http://localhost:3000/api/libros/6208d304569658099d9c0d20
+GET http://localhost:3000/api/libros/6208d36c991121bb364859c8
 
 ###
 PATCH http://localhost:3000/api/libros/6208d36c991121bb364859c8
 Content-Type: application/json
 
 {
-    "precio": false
+    "titulo": "nuevo",
+    "precio": 24.32
 }
+
+###
+GET http://localhost:3000/api/categorias
