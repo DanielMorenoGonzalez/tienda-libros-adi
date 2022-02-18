@@ -5,21 +5,6 @@ const mongoose = require('mongoose');
 
 const Categoria = require('../models/categoria');
 
-var lista = new Map();
-lista.set(1, {id: 1, titulo: "Por si las voces vuelven", precio: 17, autor: "Angel Martin", categoria: "Cine"});
-lista.set(2, {id: 2, titulo: "El ingenio de los pájaros", precio: 22, autor: "Jennifer Ackerman", categoria: "Biologia"});
-lista.set(3, {id: 3, titulo: "Mujeres del alma mia", precio: 17.95, autor: "Isabel Allende", categoria: "Sociologia"});
-lista.set(4, {id: 4, titulo: "Nunca", precio: 23.65, autor: "Ken Follet", categoria: "Novela negra"});
-lista.set(5, {id: 5, titulo: "La conducta de los pájaros", precio: 17.55, autor: "Jennifer Ackerman", categoria: "Biologia"});
-lista.set(6, {id: 6, titulo: "Las mujeres que corren con lobos", precio: 24.30, autor: "Clarissa Pinkola Estes", categoria: "Psicologia"});
-
-var lista_categorias = new Map();
-lista_categorias.set('Cine', {titulo: "Cine"});
-lista_categorias.set('Biologia', {titulo: "Biologia"});
-lista_categorias.set('Sociologia', {titulo: "Sociologia"});
-lista_categorias.set('Novela negra', {titulo: "Novela negra"});
-lista_categorias.set('Psicologia', {titulo: "Psicologia"});
-
 // Mostrar todas las categorías
 router.get('/', async function(pet, resp) {
     try {

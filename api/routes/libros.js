@@ -2,27 +2,17 @@ require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const autor = require('../models/autor');
 
 const Libro = require('../models/libro');
-
-var lista = new Map();
-var idActual = 7;
-lista.set(1, {id: 1, titulo: "Por si las voces vuelven", precio: 17, autor: "Angel Martin", categoria: "Cine"});
-lista.set(2, {id: 2, titulo: "El ingenio de los pájaros", precio: 22, autor: "Jennifer Ackerman", categoria: "Biologia"});
-lista.set(3, {id: 3, titulo: "Mujeres del alma mia", precio: 17.95, autor: "Isabel Allende", categoria: "Sociologia"});
-lista.set(4, {id: 4, titulo: "Nunca", precio: 23.65, autor: "Ken Follet", categoria: "Novela negra"});
-lista.set(5, {id: 5, titulo: "La conducta de los pájaros", precio: 17.55, autor: "Jennifer Ackerman", categoria: "Biologia"});
-lista.set(6, {id: 6, titulo: "Las mujeres que corren con lobos", precio: 24.30, autor: "Clarissa Pinkola Estes", categoria: "Psicologia"});
-
-var lista_comentarios = new Map();
-var idActualComentario = 3;
-lista_comentarios.set(1, {id: 1, titulo: "Libro apasionante", valoracion: 5, comentario: "Me ha inspirado", libro: 4})
-lista_comentarios.set(2, {id: 2, titulo: "De otro nivel", valoracion: 4.5, comentario: "Recomendaría el libro a todo el mundo", libro: 4})
 
 // Mostrar todos los libros (se tendrá que hacer paginación)
 router.get('/', async function(pet, resp) {
     try {
-        const libros = await Libro.find();
+        const libros = await Libro.find().populate({
+            path: 'autor',
+            select: 'nombre'
+        });
         resp.status(200);
         resp.setHeader('Content-Type', 'application/json');
         resp.send(libros);
@@ -71,13 +61,17 @@ router.post('/', async function(pet, resp, next) {
         });
     }
     else {
+        const autor = await autor.findById(pet.body.autor);
+
         const libro = new Libro({
             _id: new mongoose.Types.ObjectId(),
             titulo: pet.body.titulo,
-            precio: pet.body.precio
+            precio: pet.body.precio,
+            autor: autor._id
         });
         try {
             const nuevoLibro = await libro.save();
+            autor.libros = autor.libros.concat(nuevoLibro);
             resp.status(201);
             resp.header({
                 'Content-Type': 'application/json',

@@ -10,6 +10,10 @@ const autorSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    libros: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Libro'
+    }]
 },
 {
     collection: 'autores'

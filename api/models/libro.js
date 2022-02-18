@@ -13,6 +13,10 @@ const libroSchema = mongoose.Schema({
         type: Number,
         required: true,
         cast: false
+    },
+    autor: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Autor'
     }
 });
 

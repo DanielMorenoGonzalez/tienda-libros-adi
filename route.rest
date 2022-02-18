@@ -1,6 +1,12 @@
 GET http://localhost:3000/api/libros
 
 ###
+GET http://localhost:3000/api/autores
+
+###
+GET http://localhost:3000/api/autores/62096ca0008515ef865e17b0
+
+###
 GET http://localhost:3000/api/libros/6208d8371957fa48666e8fa0
 
 ###
@@ -25,5 +31,7 @@ POST http://localhost:3000/api/libros
 Content-Type: application/json
 
 {
-    "titulo": "ko"
+    "titulo": "JEJEJE",
+    "precio": 15.40,
+    "autor": "62096ca0008515ef865e17b0"
 }
