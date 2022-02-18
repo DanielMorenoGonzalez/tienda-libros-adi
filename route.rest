@@ -1,19 +1,29 @@
 GET http://localhost:3000/api/libros
 
 ###
-GET http://localhost:3000/api/libros/6208d36c991121bb364859c8
+GET http://localhost:3000/api/libros/6208d8371957fa48666e8fa0
 
 ###
 PATCH http://localhost:3000/api/libros/6208d36c991121bb364859c8
 Content-Type: application/json
 
 {
-    "titulo": "nuevo",
-    "precio": 24.32
+    "precio": false
 }
+
+###
+DELETE http://localhost:3000/api/libros/6208d36c991121bb364859c8
 
 ###
 GET http://localhost:3000/api/categorias
 
 ###
 GET http://localhost:3000/api/autores
+
+###
+POST http://localhost:3000/api/libros
+Content-Type: application/json
+
+{
+    "titulo": "ko"
+}

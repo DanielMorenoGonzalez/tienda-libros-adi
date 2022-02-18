@@ -45,7 +45,7 @@ router.get('/:id', getLibro, function(pet, resp) {
 
 // Añadir un libro
 router.post('/', async function(pet, resp, next) {
-    var precio = parseFloat(pet.params.precio);
+    var precio = parseFloat(pet.body.precio);
     if (!pet.body.titulo || !pet.body.precio) {
         resp.status(400);
         resp.setHeader('Content-Type', 'application/json');
@@ -58,11 +58,11 @@ router.post('/', async function(pet, resp, next) {
         resp.status(400);
         resp.setHeader('Content-Type', 'application/json');
         resp.send({
-            error: 2,
-            mensaje: mensajes_error.get(2)
+            error: 8,
+            mensaje: mensajes_error.get(8)
         });
     }
-    else if (typeof pet.body.titulo != String) {
+    else if (typeof pet.body.titulo != "string") {
         resp.status(400);
         resp.setHeader('Content-Type', 'application/json');
         resp.send({
