@@ -8,7 +8,11 @@ const categoriaSchema = mongoose.Schema({
         required: true,
         unique: true,
         cast: false
-    }
+    },
+    libros: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Libro'
+    }]
 });
 
 module.exports = mongoose.model('Categoria', categoriaSchema);

@@ -2,8 +2,9 @@ require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-const autor = require('../models/autor');
 
+const Autor = require('../models/autor');
+const Categoria = require('../models/categoria');
 const Libro = require('../models/libro');
 
 // Mostrar todos los libros (se tendrá que hacer paginación)
@@ -12,6 +13,9 @@ router.get('/', async function(pet, resp) {
         const libros = await Libro.find().populate({
             path: 'autor',
             select: 'nombre'
+        }).populate({
+            path: 'categoria',
+            select: 'titulo'
         });
         resp.status(200);
         resp.setHeader('Content-Type', 'application/json');
@@ -61,17 +65,25 @@ router.post('/', async function(pet, resp, next) {
         });
     }
     else {
-        const autor = await autor.findById(pet.body.autor);
-
+        const autor = await Autor.findById(pet.body.autor);
+        const categoria = await Categoria.findById(pet.body.categoria)
         const libro = new Libro({
             _id: new mongoose.Types.ObjectId(),
             titulo: pet.body.titulo,
             precio: pet.body.precio,
-            autor: autor._id
+            autor: autor._id,
+            categoria: categoria._id
         });
         try {
             const nuevoLibro = await libro.save();
-            autor.libros = autor.libros.concat(nuevoLibro);
+
+            //También se podría usar autor.libros.push(nuevoLibro)
+            autor.libros = autor.libros.concat(nuevoLibro._id);
+            await autor.save();
+            
+            categoria.libros = categoria.libros.concat(nuevoLibro._id);
+            await categoria.save();
+
             resp.status(201);
             resp.header({
                 'Content-Type': 'application/json',
@@ -84,7 +96,7 @@ router.post('/', async function(pet, resp, next) {
             resp.setHeader('Content-Type', 'application/json');
             resp.send({
                 error: 6,
-                mensaje: mensajes_error.get(6)
+                mensaje: err.message
             });
         }
     }
@@ -93,14 +105,14 @@ router.post('/', async function(pet, resp, next) {
 // Borrar un libro 
 router.delete('/:id', getLibro, async function(pet, resp) {
     try {
-        await resp.libro.remove();
+        await resp.libro.remove();        
         resp.status(204).end();
     } catch(err) {
         resp.status(500);
         resp.setHeader('Content', 'application/json');
         resp.send({
             error: 6,
-            mensaje: mensajes_error.get(6)
+            mensaje: err.message
         });
     }
 });

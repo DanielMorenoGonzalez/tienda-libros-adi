@@ -17,6 +17,10 @@ const libroSchema = mongoose.Schema({
     autor: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Autor'
+    },
+    categoria: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Categoria'
     }
 });
 

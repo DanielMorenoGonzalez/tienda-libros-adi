@@ -8,7 +8,10 @@ const Categoria = require('../models/categoria');
 // Mostrar todas las categorías
 router.get('/', async function(pet, resp) {
     try {
-        const categorias = await Categoria.find();
+        const categorias = await Categoria.find({}).populate({
+            path: 'libros',
+            select: 'titulo precio'
+        });
         resp.status(200);
         resp.setHeader('Content-Type', 'application/json');
         resp.send(categorias);

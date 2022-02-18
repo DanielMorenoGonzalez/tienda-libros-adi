@@ -7,7 +7,7 @@ GET http://localhost:3000/api/autores
 GET http://localhost:3000/api/autores/62096ca0008515ef865e17b0
 
 ###
-GET http://localhost:3000/api/libros/6208d8371957fa48666e8fa0
+GET http://localhost:3000/api/libros/620f9a6f4a00e4396318d263
 
 ###
 PATCH http://localhost:3000/api/libros/6208d36c991121bb364859c8
@@ -16,9 +16,10 @@ Content-Type: application/json
 {
     "precio": false
 }
+    
 
 ###
-DELETE http://localhost:3000/api/libros/6208d36c991121bb364859c8
+DELETE http://localhost:3000/api/libros/62102009b8c894aa2fdce2d2
 
 ###
 GET http://localhost:3000/api/categorias
@@ -31,7 +32,8 @@ POST http://localhost:3000/api/libros
 Content-Type: application/json
 
 {
-    "titulo": "JEJEJE",
-    "precio": 15.40,
-    "autor": "62096ca0008515ef865e17b0"
+    "titulo": "LIBRO 10",
+    "precio": 25,
+    "autor": "62096d07008515ef865e17b1",
+    "categoria": "620955d4da2b453f712e4e82"
 }

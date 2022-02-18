@@ -11,7 +11,9 @@ router.get('/', async function(pet, resp) {
         const autores = await Autor.find({}).populate({
             path: 'libros',
             select: 'titulo precio'
+        
         });
+        console.log(autores[1].libros.length);
         resp.status(200);
         resp.setHeader('Content-Type', 'application/json');
         resp.send(autores);
@@ -33,7 +35,6 @@ router.get('/:id', getAutor, function(pet, resp) {
 });
 
 async function getAutor(pet, resp, next) {
-    
     var autor;
     // Validamos el ObjectId (cambiamos isNaN por match)
     var id = pet.params.id.match(/^[0-9a-fA-F]{24}$/)
@@ -47,7 +48,11 @@ async function getAutor(pet, resp, next) {
                 });
     }
     try {
-        autor = await Autor.findById(id).populate('libros');
+        autor = await Autor.findById(id).populate({
+            path: 'libros',
+            select: 'titulo precio'
+        
+        });
         console.log(typeof autor.libros)
         //autor = await Autor.findById(id);
         if (autor==null) {
