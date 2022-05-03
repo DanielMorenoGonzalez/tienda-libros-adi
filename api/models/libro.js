@@ -24,4 +24,10 @@ const libroSchema = mongoose.Schema({
     }
 });
 
+libroSchema.set('toJSON', {
+    transform: (document, returnedObject) => {
+        delete returnedObject.__v
+    }
+});
+
 module.exports = mongoose.model('Libro', libroSchema);

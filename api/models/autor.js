@@ -19,4 +19,10 @@ const autorSchema = mongoose.Schema({
     collection: 'autores'
 });
 
+autorSchema.set('toJSON', {
+    transform: (document, returnedObject) => {
+        delete returnedObject.__v
+    }
+});
+
 module.exports = mongoose.model('Autor', autorSchema);

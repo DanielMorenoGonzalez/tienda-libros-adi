@@ -14,6 +14,9 @@ mongoose.connect(uri).then(
     err => { console.log(err) }
 );
 
+const usersRoutes = require('./api/routes/users');
+app.use('/api/users', usersRoutes);
+
 const librosRoutes = require('./api/routes/libros');
 app.use('/api/libros', librosRoutes);
 
@@ -23,17 +26,24 @@ app.use('/api/autores', autoresRoutes);
 const categoriasRoutes = require('./api/routes/categorias');
 app.use('/api/categorias',categoriasRoutes);
 
+const loginRoutes = require('./api/routes/login');
+app.use('/api/login', loginRoutes);
+
 app.set('json spaces', 2)
 
 global.mensajes_error = new Map([
     [1, 'Recurso no encontrado'],
-    [2, 'No es un ID válido; LONGITUD de 24 en hexadecimal'],
+    [2, 'No es un ID válido. La LONGITUD debe ser 24 en hexadecimal'],
     [3, 'Valoración no válida. Debe estar entre 1 y 5'],
     [4, 'Falta algún campo por rellenar'],
     [5, 'La palabra después del símbolo - no puede estar vacía'],
     [6, 'Error del servidor'],
     [7, 'No es una cadena de texto'],
-    [8, 'No es un número']
+    [8, 'No es un número'],
+    [9, 'El username ya existe'],
+    [10, 'El email ya existe'],
+    [11, 'Username o contraseña incorrectos'],
+    [12, 'No tienes permisos']
 ]);
 
 //Este método delega en el server.listen "nativo" de Node

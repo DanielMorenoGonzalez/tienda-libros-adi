@@ -1,39 +1,65 @@
 GET http://localhost:3000/api/libros
 
 ###
+GET http://localhost:3000/api/libros?limit=8&offset=2
+
+###
 GET http://localhost:3000/api/autores
-
-###
-GET http://localhost:3000/api/autores/62096ca0008515ef865e17b0
-
-###
-GET http://localhost:3000/api/libros/620f9a6f4a00e4396318d263
-
-###
-PATCH http://localhost:3000/api/libros/6208d36c991121bb364859c8
-Content-Type: application/json
-
-{
-    "precio": false
-}
-    
-
-###
-DELETE http://localhost:3000/api/libros/62102009b8c894aa2fdce2d2
 
 ###
 GET http://localhost:3000/api/categorias
 
 ###
-GET http://localhost:3000/api/autores
+GET http://localhost:3000/api/categorias/6242c38a8de0ff314ecca275
+
+###
+GET http://localhost:3000/api/autores/62096d07008515ef865e17b1
+
+###
+GET http://localhost:3000/api/libros/6242c55e43de650304df4ca6
+
+###
+PATCH http://localhost:3000/api/libros/62431456b6e01995416169a4
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImRhbnltb3Jlbm85NCIsImV4cCI6MTY0OTE2ODAyMjUzNn0.SRw9MdmMW0-6ZTLkjY5W50HjL_ylXWmaulFXL7RasqI
+
+{
+    "precio": 4.5
+}
+    
+
+###
+DELETE http://localhost:3000/api/libros/62431456b6e01995416169a4
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImRhbnltb3Jlbm85NCIsImV4cCI6MTY0OTE2ODAyMjUzNn0.SRw9MdmMW0-6ZTLkjY5W50HjL_ylXWmaulFXL7RasqI
 
 ###
 POST http://localhost:3000/api/libros
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImRhbnltb3Jlbm85NCIsImV4cCI6MTY0OTE2ODAyMjUzNn0.SRw9MdmMW0-6ZTLkjY5W50HjL_ylXWmaulFXL7RasqI
 Content-Type: application/json
 
 {
-    "titulo": "LIBRO 10",
-    "precio": 25,
-    "autor": "62096d07008515ef865e17b1",
-    "categoria": "620955d4da2b453f712e4e82"
+    "titulo": "Casi una novela 2",
+    "precio": 6.60,
+    "autor": "62096ca0008515ef865e17b0",
+    "categoria": "6242c2cc8de0ff314ecca274"
+}
+
+###
+POST http://localhost:3000/api/users
+Content-Type: application/json
+
+{
+    "nombre": "Daniel Moreno",
+    "username": "danymoreno9",
+    "email": "danimorenog_9@hotmail.com",
+    "password": "123456"
+}
+
+###
+POST http://localhost:3000/api/login
+Content-Type: application/json
+
+{
+    "username": "danymoreno94",
+    "password": "123456"
 }

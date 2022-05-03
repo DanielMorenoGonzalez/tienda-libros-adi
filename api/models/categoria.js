@@ -15,4 +15,10 @@ const categoriaSchema = mongoose.Schema({
     }]
 });
 
+categoriaSchema.set('toJSON', {
+    transform: (document, returnedObject) => {
+        delete returnedObject.__v
+    }
+});
+
 module.exports = mongoose.model('Categoria', categoriaSchema);

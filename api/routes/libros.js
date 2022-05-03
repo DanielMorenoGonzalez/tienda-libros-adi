@@ -2,43 +2,27 @@ require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-
 const Autor = require('../models/autor');
 const Categoria = require('../models/categoria');
 const Libro = require('../models/libro');
+const { chequeaJWT } = require("../utils/auth");
 
-// Mostrar todos los libros (se tendrá que hacer paginación)
-router.get('/', async function(pet, resp) {
-    try {
-        const libros = await Libro.find().populate({
-            path: 'autor',
-            select: 'nombre'
-        }).populate({
-            path: 'categoria',
-            select: 'titulo'
-        });
-        resp.status(200);
-        resp.setHeader('Content-Type', 'application/json');
-        resp.send(libros);
-    } catch(err) {
-        resp.status(500);
-        resp.setHeader('Content-Type', 'application/json');
-        resp.send({
-            error: 6, 
-            mensaje: mensajes_error.get(6)
-        });
-    }
+// CASO DE USO: Un usuario sin estar autentificado debe poder ver todos los libros del sitio
+router.get('/', resultadosPaginados(Libro), async function(pet, resp) {
+    resp.status(200);
+    resp.setHeader('Content-Type', 'application/json');
+    resp.send(resp.resultadosPaginados);
 });
 
-// Mostrar todos los datos de un libro
-router.get('/:id', getLibro, function(pet, resp) {
+// CASO DE USO: Un usuario sin estar autentificado debe poder ver todos los datos de un libro
+router.get('/:id', getLibro, async function(pet, resp) {
     resp.status(200);
     resp.setHeader('Content-Type', 'application/json');
     resp.send(resp.libro);
 });
 
-// Añadir un libro
-router.post('/', async function(pet, resp, next) {
+// CASO DE USO: Un usuario autentificado debe poder subir un libro al sitio para venderlo
+router.post('/', chequeaJWT, async function(pet, resp) {
     var precio = parseFloat(pet.body.precio);
     if (!pet.body.titulo || !pet.body.precio) {
         resp.status(400);
@@ -66,7 +50,7 @@ router.post('/', async function(pet, resp, next) {
     }
     else {
         const autor = await Autor.findById(pet.body.autor);
-        const categoria = await Categoria.findById(pet.body.categoria)
+        const categoria = await Categoria.findById(pet.body.categoria);
         const libro = new Libro({
             _id: new mongoose.Types.ObjectId(),
             titulo: pet.body.titulo,
@@ -87,7 +71,7 @@ router.post('/', async function(pet, resp, next) {
             resp.status(201);
             resp.header({
                 'Content-Type': 'application/json',
-                'Location': 'http://' + process.env.HOST + ':' + process.env.PORT + 
+                'Location': 'http://localhost:' + process.env.PORT + 
                             '/libros/' + nuevoLibro._id
             });
             resp.send(nuevoLibro);
@@ -96,14 +80,46 @@ router.post('/', async function(pet, resp, next) {
             resp.setHeader('Content-Type', 'application/json');
             resp.send({
                 error: 6,
-                mensaje: err.message
+                mensaje: mensajes_error.get(6)
             });
         }
     }
 });
 
-// Borrar un libro 
-router.delete('/:id', getLibro, async function(pet, resp) {
+// CASO DE USO: Un usuario autentificado debe poder actualizar un libro que ya haya subido 
+router.patch("/:id", chequeaJWT, getLibro, async function(pet, resp) {
+    if (pet.body.titulo != null) {
+        resp.libro.titulo = pet.body.titulo;
+    }
+    if (pet.body.precio != null) {
+        resp.libro.precio = pet.body.precio; 
+    }
+
+    if (isNaN(parseFloat(pet.body.precio))) {
+        resp.status(400);
+        resp.setHeader('Content-Type', 'application/json');
+        resp.send({
+            error: 8,
+            mensaje: mensajes_error.get(8)
+        });
+    }
+    else {
+        try {
+            const libroActualizado = await resp.libro.save();
+            resp.status(204).end();
+        } catch (err) {
+            resp.status(500);
+            resp.setHeader('Content-Type', 'application/json');
+            resp.send({
+                error: 6,
+                mensaje: mensajes_error.get(6)
+            });
+        }
+    }
+});
+
+// CASO DE USO:	Un usuario autentificado debe poder borrar un libro que ya haya subido
+router.delete('/:id', chequeaJWT, getLibro, async function(pet, resp) {
     try {
         await resp.libro.remove();        
         resp.status(204).end();
@@ -114,127 +130,6 @@ router.delete('/:id', getLibro, async function(pet, resp) {
             error: 6,
             mensaje: err.message
         });
-    }
-});
-
-// Mostrar todos los comentarios de un libro
-router.get('/:id/comentarios', function(pet, resp, next) {
-    var id = parseInt(pet.params.id);
-    if (isNaN(id)) {
-        resp.status(400);
-        resp.setHeader('Content-Type', 'application/json');
-        resp.send({
-            error: 2,
-            mensaje: mensajes_error.get(2)
-        });
-    }
-    else {
-        var obj = lista.get(id);
-        if (obj==undefined) {
-            resp.status(404);
-            resp.setHeader('Content-Type', 'application/json');
-            resp.send({
-                error: 1,
-                mensaje: mensajes_error.get(1)
-            });
-        }
-        else {
-            // Si se encuentra, se devuelven los comentarios
-            var arrayComentarios = new Array();
-            for (var [key, value] of lista_comentarios) {
-                if (value.libro==id)
-                    arrayComentarios.push(value);
-            }
-            obj.comentarios = arrayComentarios;
-            resp.status(200);
-            resp.setHeader('Content-Type', 'application/json');
-            resp.send(obj);
-        }
-    }
-});
-
-// Escribir un comentario de un libro
-router.post('/:id/comentarios', function(pet, resp, next) {
-    var id = parseInt(pet.params.id);
-    if (isNaN(id)) {
-        resp.status(400);
-        resp.setHeader('Content-Type', 'application/json');
-        resp.send({
-            error: 2,
-            mensaje: mensajes_error.get(2)
-        });
-    }
-    else {
-        var obj = lista.get(id);
-        if (obj==undefined) {
-            resp.status(404);
-            resp.setHeader('Content-Type', 'application/json');
-            resp.send({
-                error: 1,
-                mensaje: mensajes_error.get(1)
-            });
-        }
-        else {
-            var titulo = pet.body.titulo;
-            var valoracion = pet.body.valoracion;
-            var comentario = pet.body.comentario;
-            if (titulo && valoracion.toString() && comentario) {
-                if (valoracion<1 || valoracion>5) {
-                    resp.status(400);
-                    resp.setHeader('Content-Type', 'application/json');
-                    resp.send({
-                        error: 3,
-                        mensaje: mensajes_error.get(3)
-                    });
-                }
-                var objComentario = {
-                    id: idActualComentario,
-                    titulo: titulo,
-                    valoracion: valoracion,
-                    comentario: comentario
-                };
-                resp.status(201);
-                resp.setHeader('Location', 'http://localhost:3000/api/libros/' + id + '/comentarios/' + idActualComentario);
-                idActualComentario++;
-                resp.send(objComentario);
-            }
-            else {
-                resp.status(400);
-                resp.setHeader('Content-Type', 'application/json');
-                resp.send({
-                    error: 4,
-                    mensaje: mensajes_error.get(4)
-                });
-            }
-        }
-    }
-});
-
-
-router.patch("/:id", getLibro, async function(pet, resp) {
-    if (pet.body.titulo != null) {
-        resp.libro.titulo = pet.body.titulo;
-    }
-    if (pet.body.precio != null) {
-        resp.libro.precio = pet.body.precio; 
-    }
-    
-    try {
-        const libroActualizado = await resp.libro.save();
-        resp.status(204).end();
-    } catch (err) {
-        if (isNaN(parseFloat(pet.body.precio))) {
-            resp.status(400).send({
-                error: 8,
-                mensaje: mensajes_error.get(8)
-            });
-        }
-        else {
-            resp.status(400).send({
-                error: 7,
-                mensaje: mensajes_error.get(7)
-            });
-        }
     }
 });
 
@@ -271,5 +166,70 @@ async function getLibro(pet, resp, next) {
     resp.libro = libro;
     next();
 }
+
+function resultadosPaginados(modelo) {
+    return async (pet, resp, next) => {
+        try {
+            const offset = parseInt(pet.query.offset)
+            const limit = parseInt(pet.query.limit);
+
+            const totalResultados = await modelo.count();
+            const resultados = await modelo.find().populate({
+                path: 'autor',
+                select: 'nombre'
+            }).populate({
+                path: 'categoria',
+                select: 'titulo'
+            }).skip(offset).limit(limit);
+
+            var totalPaginas = Math.ceil(totalResultados / limit);
+            
+            var paginaActual = "";
+            if (offset == 0) {
+                paginaActual = 1;
+            } else {
+                paginaActual = Math.ceil(offset / limit);
+            }
+
+            const paginacion = {
+                total: totalResultados,
+                count: limit,
+                currentPage: paginaActual,
+                totalPages: totalPaginas,
+                pagination: {},
+                results: resultados
+            }
+
+            console.log(paginaActual + " " + totalPaginas);
+
+            var nextURL, prevURL = null;
+            paginacion.pagination.next = nextURL;
+            paginacion.pagination.previous = prevURL;
+
+            if ((paginaActual < totalPaginas) && ((offset+limit) < totalResultados)) {
+                nextURL = "http://localhost:" + process.env.PORT
+                            + "/api/libros?limit=" + limit + "&offset=" + (offset + limit);
+                paginacion.pagination.next = nextURL;
+            }
+
+            if (paginaActual > 1) {
+                prevURL = "http://localhost:" + process.env.PORT
+                            + "/api/libros?limit=" + limit + "&offset=" + (offset - limit);
+                paginacion.pagination.previous = prevURL;
+            }
+
+            resp.resultadosPaginados = paginacion;
+            next();
+        } catch(err) {
+            resp.status(500);
+            resp.setHeader('Content-Type', 'application/json');
+            resp.send({
+                error: 6, 
+                mensaje: err.message
+            });
+        }
+        
+    }
+};
 
 module.exports = router;
