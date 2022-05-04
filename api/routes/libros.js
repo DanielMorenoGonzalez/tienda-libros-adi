@@ -7,7 +7,6 @@ const Categoria = require('../models/categoria');
 const Libro = require('../models/libro');
 const User = require('../models/user');
 const { chequeaJWT } = require("../utils/auth");
-//const { getUserAuth } = require("../routes/users");
 
 // CASO DE USO: Un usuario sin estar autentificado debe poder ver todos los libros del sitio
 router.get('/', resultadosPaginados(Libro), async function(pet, resp) {
@@ -176,67 +175,118 @@ async function getLibro(pet, resp, next) {
 
 function resultadosPaginados(modelo) {
     return async (pet, resp, next) => {
-        try {
-            const offset = parseInt(pet.query.offset)
-            const limit = parseInt(pet.query.limit);
+        // Soportamos también la ruta para todos los libros sin paginar
+        if (Object.keys(pet.query).length === 0) {
+            try {
+                var resultados = "";
+                if (modelo=="Libro") {
+                    resultados = await modelo.find().populate({
+                        path: 'autor',
+                        select: 'nombre'
+                    }).populate({
+                        path: 'categoria',
+                        select: 'titulo'
+                    });
+                }
+                else if (modelo=="Autor") {
+                    resultados = await modelo.find().populate({
+                        path: 'libros',
+                        select: 'titulo precio'
+                    });
+                }
+                else {
+                    resultados = await modelo.find();
+                }
 
-            const totalResultados = await modelo.count();
-            const resultados = await modelo.find().populate({
-                path: 'autor',
-                select: 'nombre'
-            }).populate({
-                path: 'categoria',
-                select: 'titulo'
-            }).skip(offset).limit(limit);
-
-            var totalPaginas = Math.ceil(totalResultados / limit);
+                resp.resultadosPaginados = resultados;
+                next();
+            } catch (err) {
+                resp.status(500);
+                resp.setHeader('Content-Type', 'application/json');
+                resp.send({
+                    error: 6, 
+                    mensaje: err.message
+                });
+            }
             
-            var paginaActual = "";
-            if (offset == 0) {
-                paginaActual = 1;
-            } else {
-                paginaActual = Math.ceil(offset / limit);
-            }
-
-            const paginacion = {
-                total: totalResultados,
-                count: limit,
-                currentPage: paginaActual,
-                totalPages: totalPaginas,
-                pagination: {},
-                results: resultados
-            }
-
-            console.log(paginaActual + " " + totalPaginas);
-
-            var nextURL, prevURL = null;
-            paginacion.pagination.next = nextURL;
-            paginacion.pagination.previous = prevURL;
-
-            if ((paginaActual < totalPaginas) && ((offset+limit) < totalResultados)) {
-                nextURL = "http://localhost:" + process.env.PORT
-                            + "/api/libros?limit=" + limit + "&offset=" + (offset + limit);
-                paginacion.pagination.next = nextURL;
-            }
-
-            if (paginaActual > 1) {
-                prevURL = "http://localhost:" + process.env.PORT
-                            + "/api/libros?limit=" + limit + "&offset=" + (offset - limit);
-                paginacion.pagination.previous = prevURL;
-            }
-
-            resp.resultadosPaginados = paginacion;
-            next();
-        } catch(err) {
-            resp.status(500);
-            resp.setHeader('Content-Type', 'application/json');
-            resp.send({
-                error: 6, 
-                mensaje: err.message
-            });
         }
-        
+        else {
+            try {
+                const offset = parseInt(pet.query.offset)
+                const limit = parseInt(pet.query.limit);
+    
+                const totalResultados = await modelo.count();
+                var resultados = "";
+                var cadena;
+                if (modelo=="Libro") {
+                    resultados = await modelo.find().populate({
+                        path: 'autor',
+                        select: 'nombre'
+                    }).populate({
+                        path: 'categoria',
+                        select: 'titulo'
+                    }).skip(offset).limit(limit);
+                    cadena = "libros";
+                }
+                else if (modelo=="Autor") {
+                    resultados = await modelo.find().populate({
+                        path: 'libros',
+                        select: 'titulo precio'
+                    });
+                    cadena = "autores";
+                }
+                else {
+                    resultados = await modelo.find().skip(offset).limit(limit);
+                    cadena = "categorias";
+                }
+    
+                var totalPaginas = Math.ceil(totalResultados / limit);
+                
+                var paginaActual = "";
+                if (offset == 0) {
+                    paginaActual = 1;
+                } else {
+                    paginaActual = Math.ceil(offset / limit);
+                }
+    
+                const paginacion = {
+                    total: totalResultados,
+                    count: limit,
+                    currentPage: paginaActual,
+                    totalPages: totalPaginas,
+                    pagination: {},
+                    results: resultados
+                }
+    
+                var nextURL, prevURL = null;
+                paginacion.pagination.next = nextURL;
+                paginacion.pagination.previous = prevURL;
+    
+                if ((paginaActual < totalPaginas) && ((offset+limit) < totalResultados)) {
+                    nextURL = "http://localhost:" + process.env.PORT
+                                + "/api/" + cadena + "?limit=" + limit + "&offset=" + (offset + limit);
+                    paginacion.pagination.next = nextURL;
+                }
+    
+                if (paginaActual > 1) {
+                    prevURL = "http://localhost:" + process.env.PORT
+                                + "/api/" + cadena + "?limit=" + limit + "&offset=" + (offset - limit);
+                    paginacion.pagination.previous = prevURL;
+                }
+    
+                resp.resultadosPaginados = paginacion;
+                next();
+            } catch(err) {
+                resp.status(500);
+                resp.setHeader('Content-Type', 'application/json');
+                resp.send({
+                    error: 6, 
+                    mensaje: err.message
+                });
+            }
+        }
     }
 };
 
 module.exports = router;
+module.exports.resultadosPaginados = resultadosPaginados;

@@ -3,25 +3,13 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const Categoria = require('../models/categoria');
+const { resultadosPaginados } = require('../routes/libros');
 
 // CASO DE USO: Un usuario sin estar autentificado debe poder ver todas las categorías existentes
-router.get('/', async function(pet, resp) {
-    try {
-        const categorias = await Categoria.find({}).populate({
-            path: 'libros',
-            select: 'titulo precio autor'
-        });
-        resp.status(200);
-        resp.setHeader('Content-Type', 'application/json');
-        resp.send(categorias);
-    } catch(err) {
-        resp.status(500);
-        resp.setHeader('Content-Type', 'application/json');
-        resp.send({
-            error: 6, 
-            mensaje: mensajes_error.get(6)
-        });
-    }
+router.get('/', resultadosPaginados(Categoria), async function(pet, resp) {
+    resp.status(200);
+    resp.setHeader('Content-Type', 'application/json');
+    resp.send(resp.resultadosPaginados);
 });
 
 // CASO DE USO: Un usuario sin estar autentificado debe poder ver los libros de una categoría

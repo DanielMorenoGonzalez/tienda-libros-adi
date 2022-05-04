@@ -48,6 +48,14 @@ router.post('/', chequeaJWT, async function(pet, resp) {
                 mensaje: mensajes_error.get(13)
             });
         }
+        else if (!libro.disponible) {
+            resp.status(400);
+            resp.setHeader('Content-Type', 'application/json');
+            resp.send({
+                error: 14,
+                mensaje: mensajes_error.get(14)
+            });
+        }
         else {
             const compra = new Compra({
                 _id: new mongoose.Types.ObjectId(),

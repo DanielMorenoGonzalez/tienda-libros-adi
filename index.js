@@ -47,7 +47,8 @@ global.mensajes_error = new Map([
     [10, 'El email ya existe'],
     [11, 'Username o contraseña incorrectos'],
     [12, 'No tienes permisos'],
-    [13, 'El libro no pertenece al vendedor']
+    [13, 'El libro no pertenece al vendedor'],
+    [14, 'El libro no está disponible a la venta']
 ]);
 
 //Este método delega en el server.listen "nativo" de Node

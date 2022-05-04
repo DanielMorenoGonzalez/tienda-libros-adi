@@ -102,4 +102,3 @@ async function getUserByUsername(pet, resp, next) {
 }
 
 module.exports = router;
-//module.exports.getUserAuth = getUserAuth;

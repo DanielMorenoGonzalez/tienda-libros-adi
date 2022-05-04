@@ -3,26 +3,13 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const Autor = require('../models/autor');
+const { resultadosPaginados } = require('../routes/libros');
 
 // CASO DE USO: Un usuario sin estar autentificado debe poder ver todos los autores
-router.get('/', async function(pet, resp) {
-    try {
-        const autores = await Autor.find({}).populate({
-            path: 'libros',
-            select: 'titulo precio'
-        });
-
-        resp.status(200);
-        resp.setHeader('Content-Type', 'application/json');
-        resp.send(autores);
-    } catch(err) {
-        resp.status(500);
-        resp.setHeader('Content-Type', 'application/json');
-        resp.send({
-            error: 6, 
-            mensaje: mensajes_error.get(6)
-        });
-    }
+router.get('/', resultadosPaginados(Autor), async function(pet, resp) {
+    resp.status(200);
+    resp.setHeader('Content-Type', 'application/json');
+    resp.send(resp.resultadosPaginados);
 });
 
 // CASO DE USO: Un usuario sin estar autentificado debe poder ver los datos de un autor

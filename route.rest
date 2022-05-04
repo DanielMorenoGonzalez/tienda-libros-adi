@@ -7,7 +7,13 @@ GET http://localhost:3000/api/libros/627232f2e3547b5d6a39ffb3
 GET http://localhost:3000/api/autores
 
 ###
+GET http://localhost:3000/api/autores?limit=2&&offset=0
+
+###
 GET http://localhost:3000/api/categorias
+
+###
+GET http://localhost:3000/api/categorias?limit=2&offset=0
 
 ###
 GET http://localhost:3000/api/categorias/6242c38a8de0ff314ecca275
