@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt')
 const User = require('../models/user');
 
+// CASO DE USO: Un usuario debe poder crearse una cuenta
 router.post('/', async(pet, resp) => {
     if(!pet.body.nombre || !pet.body.username || !pet.body.password
         || !pet.body.email) {
@@ -66,4 +67,39 @@ router.post('/', async(pet, resp) => {
     }
 });
 
+// CASO DE USO: Un usuario sin estar autentificado debe poder ver el perfil de otro usuario
+router.get('/:username', getUserByUsername, async(pet, resp, next) => {
+    resp.status(200);
+    resp.setHeader('Content-Type', 'application/json');
+    resp.send(resp.user);
+});
+
+async function getUserByUsername(pet, resp, next) {
+    var user;
+
+    try {
+        user = await User.findOne({username: pet.params.username})
+                        .select('nombre username email libros');
+        if (user==null) {
+            return resp.status(404)
+                    .setHeader('Content-Type', 'application/json')
+                    .send({
+                        error: 1,
+                        mensaje: mensajes_error.get(1)
+                    });
+        }
+    } catch (err) {
+        return resp.status(500)
+                    .setHeader('Content-Type', 'application/json')
+                    .send({
+                        error: 6,
+                        mensaje: mensajes_error.get(6)
+                    });
+    }
+
+    resp.user = user;
+    next();
+}
+
 module.exports = router;
+//module.exports.getUserAuth = getUserAuth;

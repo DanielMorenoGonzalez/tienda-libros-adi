@@ -1,7 +1,7 @@
 GET http://localhost:3000/api/libros
 
 ###
-GET http://localhost:3000/api/libros?limit=8&offset=2
+GET http://localhost:3000/api/libros/627232f2e3547b5d6a39ffb3
 
 ###
 GET http://localhost:3000/api/autores
@@ -38,7 +38,7 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImRhb
 Content-Type: application/json
 
 {
-    "titulo": "Casi una novela 2",
+    "titulo": "Casi una novela 7",
     "precio": 6.60,
     "autor": "62096ca0008515ef865e17b0",
     "categoria": "6242c2cc8de0ff314ecca274"
@@ -62,4 +62,19 @@ Content-Type: application/json
 {
     "username": "danymoreno94",
     "password": "123456"
+}
+
+###
+GET http://localhost:3000/api/users/danymoreno94
+
+###
+POST http://localhost:3000/api/compras
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImRhbnltb3Jlbm85NCIsImV4cCI6MTY0OTE2ODAyMjUzNn0.SRw9MdmMW0-6ZTLkjY5W50HjL_ylXWmaulFXL7RasqI
+Content-Type: application/json
+
+{
+    "vendedor": "623ba1b5c10b0209317287a2",
+    "comprador": "623d8ac5f7d4bda693bc9ecd",
+    "libro": "62723ace331a4fb52253fe46",
+    "valoracion": 5
 }

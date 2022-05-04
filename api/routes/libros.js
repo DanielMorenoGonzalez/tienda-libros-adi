@@ -5,7 +5,9 @@ const mongoose = require('mongoose');
 const Autor = require('../models/autor');
 const Categoria = require('../models/categoria');
 const Libro = require('../models/libro');
+const User = require('../models/user');
 const { chequeaJWT } = require("../utils/auth");
+//const { getUserAuth } = require("../routes/users");
 
 // CASO DE USO: Un usuario sin estar autentificado debe poder ver todos los libros del sitio
 router.get('/', resultadosPaginados(Libro), async function(pet, resp) {
@@ -51,12 +53,14 @@ router.post('/', chequeaJWT, async function(pet, resp) {
     else {
         const autor = await Autor.findById(pet.body.autor);
         const categoria = await Categoria.findById(pet.body.categoria);
+        const vendedor = await User.findOne({username: resp.locals.userPayload.username})
         const libro = new Libro({
             _id: new mongoose.Types.ObjectId(),
             titulo: pet.body.titulo,
             precio: pet.body.precio,
             autor: autor._id,
-            categoria: categoria._id
+            categoria: categoria._id,
+            vendedor: vendedor._id
         });
         try {
             const nuevoLibro = await libro.save();
@@ -67,6 +71,9 @@ router.post('/', chequeaJWT, async function(pet, resp) {
             
             categoria.libros = categoria.libros.concat(nuevoLibro._id);
             await categoria.save();
+
+            vendedor.libros = vendedor.libros.concat(nuevoLibro._id);
+            await vendedor.save();
 
             resp.status(201);
             resp.header({

@@ -20,7 +20,11 @@ const userSchema = mongoose.Schema({
     password: {
         type: String,
         required: true
-    }
+    },
+    libros: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Libro'
+    }]
 });
 
 userSchema.set('toJSON', {

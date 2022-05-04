@@ -8,6 +8,8 @@ function chequeaJWT(pet, resp, next) {
 
     try {
         var decoded = jwt.decode(token, process.env.SECRET);
+        resp.locals.userPayload = decoded;
+        // Guardar decoded en pet 
     } catch(err) {
        console.log(err.message);
     }

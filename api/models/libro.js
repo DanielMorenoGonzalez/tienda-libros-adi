@@ -14,6 +14,10 @@ const libroSchema = mongoose.Schema({
         required: true,
         cast: false
     },
+    disponible: {
+        type: Boolean,
+        default: true
+    },
     autor: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Autor'
@@ -21,6 +25,10 @@ const libroSchema = mongoose.Schema({
     categoria: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Categoria'
+    },
+    vendedor: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     }
 });
 

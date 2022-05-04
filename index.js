@@ -24,10 +24,13 @@ const autoresRoutes = require('./api/routes/autores');
 app.use('/api/autores', autoresRoutes);
 
 const categoriasRoutes = require('./api/routes/categorias');
-app.use('/api/categorias',categoriasRoutes);
+app.use('/api/categorias', categoriasRoutes);
 
 const loginRoutes = require('./api/routes/login');
 app.use('/api/login', loginRoutes);
+
+const comprasRoutes = require('./api/routes/compras');
+app.use('/api/compras', comprasRoutes);
 
 app.set('json spaces', 2)
 
@@ -43,7 +46,8 @@ global.mensajes_error = new Map([
     [9, 'El username ya existe'],
     [10, 'El email ya existe'],
     [11, 'Username o contraseña incorrectos'],
-    [12, 'No tienes permisos']
+    [12, 'No tienes permisos'],
+    [13, 'El libro no pertenece al vendedor']
 ]);
 
 //Este método delega en el server.listen "nativo" de Node
