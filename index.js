@@ -1,7 +1,32 @@
 var express = require('express');
 var morgan = require('morgan');
 require('dotenv').config();
+
+const swaggerUI = require("swagger-ui-express");
+const swaggerJsDoc = require("swagger-jsdoc");
+
+const options = {
+   definition: {
+       openapi: "3.0.0",
+       info: {
+           title: "API",
+           version: "1.0.0",
+           description: "Express library API"
+       },
+       servers: [
+           {
+               url: "http://localhost:3000"
+           }
+       ],  
+   },
+   apis: ["./routes/*.js"]
+}
+
+const specs = swaggerJsDoc(options);
+
 var app = express();
+
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 
 const mongoose = require('mongoose');
 
@@ -19,9 +44,6 @@ app.use('/api/users', usersRoutes);
 
 const librosRoutes = require('./api/routes/libros');
 app.use('/api/libros', librosRoutes);
-
-const autoresRoutes = require('./api/routes/autores');
-app.use('/api/autores', autoresRoutes);
 
 const categoriasRoutes = require('./api/routes/categorias');
 app.use('/api/categorias', categoriasRoutes);

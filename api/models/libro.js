@@ -14,17 +14,17 @@ const libroSchema = mongoose.Schema({
         required: true,
         cast: false
     },
-    disponible: {
-        type: Boolean,
-        default: true
-    },
     autor: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Autor'
+        type: String,
+        required: true
     },
     categoria: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Categoria'
+    },
+    disponible: {
+        type: Boolean,
+        default: true
     },
     vendedor: {
         type: mongoose.Schema.Types.ObjectId,

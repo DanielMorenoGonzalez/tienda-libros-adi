@@ -1,13 +1,7 @@
 GET http://localhost:3000/api/libros
 
 ###
-GET http://localhost:3000/api/libros/627232f2e3547b5d6a39ffb3
-
-###
-GET http://localhost:3000/api/autores
-
-###
-GET http://localhost:3000/api/autores?limit=2&&offset=0
+GET http://localhost:3000/api/libros/6242c4d343de650304df4c9a
 
 ###
 GET http://localhost:3000/api/categorias
@@ -19,28 +13,22 @@ GET http://localhost:3000/api/categorias?limit=2&offset=0
 GET http://localhost:3000/api/categorias/6242c38a8de0ff314ecca275
 
 ###
-GET http://localhost:3000/api/autores/62096d07008515ef865e17b1
-
-###
-GET http://localhost:3000/api/libros/6242c55e43de650304df4ca6
-
-###
 PATCH http://localhost:3000/api/libros/62431456b6e01995416169a4
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImRhbmltb3Jlbm85NCIsImV4cCI6MTY1MzAzMjc0NTg0MH0.1q00ntmQ6FGd-DjLcji0DA-xGFrXRAGgCIEFTvTEX9c
 Content-Type: application/json
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImRhbnltb3Jlbm85NCIsImV4cCI6MTY0OTE2ODAyMjUzNn0.SRw9MdmMW0-6ZTLkjY5W50HjL_ylXWmaulFXL7RasqI
 
 {
-    "precio": 4.5
+    "precio": 9.80
 }
     
 
 ###
 DELETE http://localhost:3000/api/libros/62431456b6e01995416169a4
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImRhbnltb3Jlbm85NCIsImV4cCI6MTY0OTE2ODAyMjUzNn0.SRw9MdmMW0-6ZTLkjY5W50HjL_ylXWmaulFXL7RasqI
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImRhbmltb3Jlbm85NCIsImV4cCI6MTY1MzAzMjc0NTg0MH0.1q00ntmQ6FGd-DjLcji0DA-xGFrXRAGgCIEFTvTEX9c
 
 ###
 POST http://localhost:3000/api/libros
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImRhbnltb3Jlbm85NCIsImV4cCI6MTY0OTE2ODAyMjUzNn0.SRw9MdmMW0-6ZTLkjY5W50HjL_ylXWmaulFXL7RasqI
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImRhbmltb3Jlbm85NCIsImV4cCI6MTY1MzAzMjc0NTg0MH0.1q00ntmQ6FGd-DjLcji0DA-xGFrXRAGgCIEFTvTEX9c
 Content-Type: application/json
 
 {
@@ -55,9 +43,9 @@ POST http://localhost:3000/api/users
 Content-Type: application/json
 
 {
-    "nombre": "Daniel Moreno",
-    "username": "danymoreno9",
-    "email": "danimorenog_9@hotmail.com",
+    "nombre": "Tamara Pérez",
+    "username": "tamiperez90",
+    "email": "tamiperez_90@hotmail.com",
     "password": "123456"
 }
 
@@ -66,16 +54,16 @@ POST http://localhost:3000/api/login
 Content-Type: application/json
 
 {
-    "username": "danymoreno94",
+    "username": "danimoreno94",
     "password": "123456"
 }
 
 ###
-GET http://localhost:3000/api/users/danymoreno94
+GET http://localhost:3000/api/users/danimoreno94
 
 ###
 POST http://localhost:3000/api/compras
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImRhbnltb3Jlbm85NCIsImV4cCI6MTY0OTE2ODAyMjUzNn0.SRw9MdmMW0-6ZTLkjY5W50HjL_ylXWmaulFXL7RasqI
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImRhbmltb3Jlbm85NCIsImV4cCI6MTY1MzAzMjc0NTg0MH0.1q00ntmQ6FGd-DjLcji0DA-xGFrXRAGgCIEFTvTEX9c
 Content-Type: application/json
 
 {

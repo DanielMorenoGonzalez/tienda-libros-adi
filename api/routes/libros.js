@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-const Autor = require('../models/autor');
 const Categoria = require('../models/categoria');
 const Libro = require('../models/libro');
 const User = require('../models/user');
@@ -41,7 +40,7 @@ router.post('/', chequeaJWT, async function(pet, resp) {
             mensaje: mensajes_error.get(8)
         });
     }
-    else if (typeof pet.body.titulo != "string") {
+    else if (typeof pet.body.titulo != "string" || typeof pet.body.autor != "string") {
         resp.status(400);
         resp.setHeader('Content-Type', 'application/json');
         resp.send({
@@ -50,23 +49,18 @@ router.post('/', chequeaJWT, async function(pet, resp) {
         });
     }
     else {
-        const autor = await Autor.findById(pet.body.autor);
         const categoria = await Categoria.findById(pet.body.categoria);
         const vendedor = await User.findOne({username: resp.locals.userPayload.username})
         const libro = new Libro({
             _id: new mongoose.Types.ObjectId(),
             titulo: pet.body.titulo,
             precio: pet.body.precio,
-            autor: autor._id,
+            autor: pet.body.autor,
             categoria: categoria._id,
             vendedor: vendedor._id
         });
         try {
             const nuevoLibro = await libro.save();
-
-            //También se podría usar autor.libros.push(nuevoLibro)
-            autor.libros = autor.libros.concat(nuevoLibro._id);
-            await autor.save();
             
             categoria.libros = categoria.libros.concat(nuevoLibro._id);
             await categoria.save();
@@ -99,6 +93,9 @@ router.patch("/:id", chequeaJWT, getLibro, async function(pet, resp) {
     }
     if (pet.body.precio != null) {
         resp.libro.precio = pet.body.precio; 
+    }
+    if (pet.body.autor != null) {
+        resp.libro.autor = pet.body.autor;
     }
 
     if (isNaN(parseFloat(pet.body.precio))) {
@@ -181,17 +178,8 @@ function resultadosPaginados(modelo) {
                 var resultados = "";
                 if (modelo=="Libro") {
                     resultados = await modelo.find().populate({
-                        path: 'autor',
-                        select: 'nombre'
-                    }).populate({
                         path: 'categoria',
                         select: 'titulo'
-                    });
-                }
-                else if (modelo=="Autor") {
-                    resultados = await modelo.find().populate({
-                        path: 'libros',
-                        select: 'titulo precio'
                     });
                 }
                 else {
@@ -220,20 +208,10 @@ function resultadosPaginados(modelo) {
                 var cadena;
                 if (modelo=="Libro") {
                     resultados = await modelo.find().populate({
-                        path: 'autor',
-                        select: 'nombre'
-                    }).populate({
                         path: 'categoria',
                         select: 'titulo'
                     }).skip(offset).limit(limit);
                     cadena = "libros";
-                }
-                else if (modelo=="Autor") {
-                    resultados = await modelo.find().populate({
-                        path: 'libros',
-                        select: 'titulo precio'
-                    });
-                    cadena = "autores";
                 }
                 else {
                     resultados = await modelo.find().skip(offset).limit(limit);
