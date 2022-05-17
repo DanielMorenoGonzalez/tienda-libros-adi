@@ -44,101 +44,102 @@ const { chequeaJWT } = require("../utils/auth");
 
 /**
  * @swagger
- * /api/compras:
- *  post:
- *      summary: Realizar una compra
- *      tags: [Compras]
- *      requestBody:
- *          required: true
- *          content:
- *              application/json:
- *                  schema:
- *                      type: object
- *                      properties:
- *                          vendedor:
- *                              type: string
- *                              example: 627e0c6ea5b4f89db9f0cac9
- *                          comprador:
- *                              type: string
- *                              example: 627e0c45a5b4f89db9f0cac5
- *                          libro:
- *                              type: string
- *                              example: 6242c55e43de650304df4ca6
- *                          valoracion:
- *                              type: integer
- *                              example: 5
- *                      required:
- *                          - vendedor
- *                          - comprador
- *                          - libro
- *                          - valoracion               
- *      responses:
- *          201:
- *              description: Compra realizada con éxito
- *              content: 
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Compra'
- *              headers:
- *                  Location:
- *                      type: string
- *                      description: URL de la nueva compra
- *          400:
- *              description: Datos incorrectos o falta algún campo
+ * paths:
+ *  /api/compras:
+ *      post:
+ *          summary: Realizar una compra
+ *          tags: [Compras]
+ *          requestBody:
+ *              required: true
  *              content:
  *                  application/json:
  *                      schema:
- *                          $ref: '#/components/schemas/Error'
- *                      examples:
- *                          cod4:
- *                              summary: Código de error 4
- *                              value:
- *                                  error: 4
- *                                  mensaje: Falta algún campo por rellenar
- *                          cod8:
- *                              summary: Código de error 8
- *                              value:
- *                                  error: 8
- *                                  mensaje: No es un número
- *                          cod3:
- *                              summary: Código de error 3
- *                              value:
- *                                  error: 3
- *                                  mensaje: Valoración no válida. Debe estar entre 1 y 5
- *                          cod13:
- *                              summary: Código de error 13
- *                              value:
- *                                  error: 13
- *                                  mensaje: El libro no pertenece al vendedor
- *                          cod14:
- *                              summary: Código de error 14
- *                              value:
- *                                  error: 14
- *                                  mensaje: El libro no está disponible a la venta
- *          403:
- *              description: No tienes permisos
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Error'
- *                      examples:
- *                          cod12:
- *                              summary: Código de error 12
- *                              value:
- *                                  error: 12
- *                                  mensaje: No tienes permisos
- *          500:
- *              description: Error del servidor
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Error'
- *                      examples:
- *                          cod6:
- *                              summary: Código de error 6
- *                              value:
- *                                  error: 6
- *                                  mensaje: Error del servidor
+ *                          type: object
+ *                          properties:
+ *                              vendedor:
+ *                                  type: string
+ *                                  example: 627e0c6ea5b4f89db9f0cac9
+ *                              comprador:
+ *                                  type: string
+ *                                  example: 627e0c45a5b4f89db9f0cac5
+ *                              libro:
+ *                                  type: string
+ *                                  example: 6242c55e43de650304df4ca6
+ *                              valoracion:
+ *                                  type: integer
+ *                                  example: 5
+ *                          required:
+ *                              - vendedor
+ *                              - comprador
+ *                              - libro
+ *                              - valoracion               
+ *          responses:
+ *              201:
+ *                  description: Compra realizada con éxito
+ *                  content: 
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/Compra'
+ *                  headers:
+ *                      Location:
+ *                          type: string
+ *                          description: URL de la nueva compra
+ *              400:
+ *                  description: Datos incorrectos o falta algún campo
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/Error'
+ *                          examples:
+ *                              cod4:
+ *                                  summary: Código de error 4
+ *                                  value:
+ *                                      error: 4
+ *                                      mensaje: Falta algún campo por rellenar
+ *                              cod8:
+ *                                  summary: Código de error 8
+ *                                  value:
+ *                                      error: 8
+ *                                      mensaje: No es un número
+ *                              cod3:
+ *                                  summary: Código de error 3
+ *                                  value:
+ *                                      error: 3
+ *                                      mensaje: Valoración no válida. Debe estar entre 1 y 5
+ *                              cod13:
+ *                                  summary: Código de error 13
+ *                                  value:
+ *                                      error: 13
+ *                                      mensaje: El libro no pertenece al vendedor
+ *                              cod14:
+ *                                  summary: Código de error 14
+ *                                  value:
+ *                                      error: 14
+ *                                      mensaje: El libro no está disponible a la venta
+ *              403:
+ *                  description: No tienes permisos
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/Error'
+ *                          examples:
+ *                              cod12:
+ *                                  summary: Código de error 12
+ *                                  value:
+ *                                      error: 12
+ *                                      mensaje: No tienes permisos
+ *              500:
+ *                  description: Error del servidor
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/Error'
+ *                          examples:
+ *                              cod6:
+ *                                  summary: Código de error 6
+ *                                  value:
+ *                                      error: 6
+ *                                      mensaje: Error del servidor
  */
 router.post('/', chequeaJWT, async function(pet, resp) {
     var puntuacion = parseInt(pet.body.valoracion);
