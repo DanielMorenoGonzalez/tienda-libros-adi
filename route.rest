@@ -59,16 +59,25 @@ Content-Type: application/json
 }
 
 ###
+POST http://localhost:3000/api/login
+Content-Type: application/json
+
+{
+    "username": "tamiperez90",
+    "password": "123456"
+}
+
+###
 GET http://localhost:3000/api/users/danimoreno94
 
 ###
 POST http://localhost:3000/api/compras
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImRhbmltb3Jlbm85NCIsImV4cCI6MTY1MzAzMjc0NTg0MH0.1q00ntmQ6FGd-DjLcji0DA-xGFrXRAGgCIEFTvTEX9c
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRhbWlwZXJlejkwIiwiZXhwIjoxNjUzMzM1MjA1NjAzfQ.jDxToLpzfvrvQpdc1cCCJPsKgNIIVfbWIW7YZLuGM_4
 Content-Type: application/json
 
 {
-    "vendedor": "623ba1b5c10b0209317287a2",
-    "comprador": "623d8ac5f7d4bda693bc9ecd",
-    "libro": "62723ace331a4fb52253fe46",
+    "vendedor": "627e0c6ea5b4f89db9f0cac9",
+    "comprador": "627e0c45a5b4f89db9f0cac5",
+    "libro": "6242c55e43de650304df4ca6",
     "valoracion": 5
 }

@@ -7,7 +7,116 @@ const Libro = require('../models/libro');
 const User = require('../models/user')
 const { chequeaJWT } = require("../utils/auth");
 
-// CASO DE USO: Un usuario autentificado debe poder comprar un libro
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *      Compra:
+ *          type: object
+ *          required:
+ *              - vendedor
+ *              - comprador
+ *              - libro
+ *              - valoracion
+ *          properties:
+ *              id:
+ *                  type: string
+ *                  description: ID autogenerado de la compra
+ *              vendedor:
+ *                  type: string
+ *                  description: ID del usuario que vende el libro
+ *              comprador:
+ *                  type: string
+ *                  description: ID del usuario que compra el libro
+ *              libro:
+ *                  type: string
+ *                  description: ID del libro
+ *              valoracion:
+ *                  type: integer
+ *                  description: Número entre 1 y 5 que representa la valoración de la compra
+ *          example:
+ *              id: 6242c4d343de650304df4p3e
+ *              vendedor: 627e0c6ea5b4f89db9f0cac9
+ *              comprador: 627e0c45a5b4f89db9f0cac5
+ *              libro: 6242c55e43de650304df4ca6
+ *              valoracion: 5
+ *      Error:
+ *          type: object
+ *          properties:
+ *              error:
+ *                  type: integer
+ *                  description: Código de error
+ *              mensaje:
+ *                  type: string
+ *                  description: Mensaje descriptivo del error
+ *              required:
+ *                  - error
+ *                  - mensaje
+ *          example:
+ *              error: 6
+ *              mensaje: Error del servidor
+ */
+
+/**
+ * @swagger
+ * /api/compras:
+ *  post:
+ *      summary: Realizar una compra
+ *      tags: [Compras]
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          vendedor:
+ *                              type: string
+ *                              example: 627e0c6ea5b4f89db9f0cac9
+ *                          comprador:
+ *                              type: string
+ *                              example: 627e0c45a5b4f89db9f0cac5
+ *                          libro:
+ *                              type: string
+ *                              example: 6242c55e43de650304df4ca6
+ *                          valoracion:
+ *                              type: integer
+ *                              example: 5
+ *                      required:
+ *                          - vendedor
+ *                          - comprador
+ *                          - libro
+ *                          - valoracion               
+ *      responses:
+ *          201:
+ *              description: Compra realizada con éxito
+ *              content: 
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Compra'
+ *              headers:
+ *                  Location:
+ *                      type: string
+ *                      description: URL de la nueva compra
+ *          400:
+ *              description: Datos incorrectos o falta algún campo
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Error'
+ *          403:
+ *              description: No tienes permisos
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Error'
+ *          500:
+ *              description: Error del servidor
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Error'
+ */
 router.post('/', chequeaJWT, async function(pet, resp) {
     var puntuacion = parseInt(pet.body.valoracion);
     if (!pet.body.comprador || !pet.body.vendedor ||

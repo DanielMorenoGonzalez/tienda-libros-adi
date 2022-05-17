@@ -5,6 +5,46 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt')
 const User = require('../models/user');
 
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *      User:
+ *          type: object
+ *          required:
+ *              - nombre
+ *              - username
+ *              - email
+ *              - password
+ *              - libros
+ *          properties:
+ *              id:
+ *                  type: string
+ *                  description: ID autogenerado del usuario
+ *              nombre:
+ *                  type: string
+ *                  description: Nombre del usuario
+ *              username:
+ *                  type: string
+ *                  description: Nick del usuario
+ *              email:
+ *                  type: string
+ *                  description: Email del usuario
+ *              password:
+ *                  type: string
+ *                  description: Contraseña del usuario a la que se le ha aplicado un hash
+ *              libros:
+ *                  type: array
+ *                  description: Lista de libros que el usuario ha publicado
+ *          example:
+ *              id: 627e0c45a5b4f89db9f0cac5
+ *              nombre: Daniel Moreno
+ *              username: danimoreno94
+ *              email: danimorenog_94@hotmail.com
+ *              password: $2b$10$eHuKZC9b0j.NH5mOWIjPQeujpL2A.Rlo1qc/mG1bCFmojVMijGJ/q
+ *              libros: [6242c4d343de650304df4c9a, 6242c51043de650304df4ca0, 6242c67843de650304df4cc1, 6242c6eb43de650304df4cc7, 6282c682a9bc42cd87d5285f]
+ */
+
 // CASO DE USO: Un usuario debe poder crearse una cuenta
 router.post('/', async(pet, resp) => {
     if(!pet.body.nombre || !pet.body.username || !pet.body.password

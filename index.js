@@ -9,9 +9,9 @@ const options = {
    definition: {
        openapi: "3.0.0",
        info: {
-           title: "API",
+           title: "API Tienda Libros",
            version: "1.0.0",
-           description: "Express library API"
+           description: "API de una tienda de libros hecho por Daniel Moreno González para la asignatura Aplicaciones Distribuidas en Internet"
        },
        servers: [
            {
@@ -19,7 +19,7 @@ const options = {
            }
        ],  
    },
-   apis: ["./routes/*.js"]
+   apis: ["./api/routes/*.js"]
 }
 
 const specs = swaggerJsDoc(options);
@@ -58,7 +58,7 @@ app.set('json spaces', 2)
 
 global.mensajes_error = new Map([
     [1, 'Recurso no encontrado'],
-    [2, 'No es un ID válido. La LONGITUD debe ser 24 en hexadecimal'],
+    [2, 'No es un ID válido (longitud de 24 en hexadecimal)'],
     [3, 'Valoración no válida. Debe estar entre 1 y 5'],
     [4, 'Falta algún campo por rellenar'],
     [5, 'La palabra después del símbolo - no puede estar vacía'],

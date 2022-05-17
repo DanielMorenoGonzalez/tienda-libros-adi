@@ -5,6 +5,31 @@ const mongoose = require('mongoose');
 const Categoria = require('../models/categoria');
 const { resultadosPaginados } = require('../routes/libros');
 
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *      Categoria:
+ *          type: object
+ *          required:
+ *              - titulo
+ *              - libros
+ *          properties:
+ *              id:
+ *                  type: string
+ *                  description: ID autogenerado de la categoría
+ *              titulo:
+ *                  type: string
+ *                  description: Título de la categoría
+ *              libros:
+ *                  type: array
+ *                  description: Array con los IDs de los libros que pertenecen a la categoría    
+ *          example:
+ *              id: 6242c38a8de0ff314ecca275
+ *              titulo: Autoayuda
+ *              libros: [6242c4d343de650304df4c9a, 6242c51043de650304df4ca0]
+ */
+
 // CASO DE USO: Un usuario sin estar autentificado debe poder ver todas las categorías existentes
 router.get('/', resultadosPaginados(Categoria), async function(pet, resp) {
     resp.status(200);
@@ -12,7 +37,31 @@ router.get('/', resultadosPaginados(Categoria), async function(pet, resp) {
     resp.send(resp.resultadosPaginados);
 });
 
-// CASO DE USO: Un usuario sin estar autentificado debe poder ver los libros de una categoría
+/**
+ * @swagger
+ * /api/categorias/{id}:
+ *  get:
+ *      summary: Obtener una categoría por su ID
+ *      tags: [Categorias]
+ *      parameters:
+ *          - in: path
+ *            name: id
+ *            schema:
+ *              type: string
+ *            required: true
+ *            description: ID de la categoría
+ *      responses:
+ *          200:
+ *            description: OK
+ *            contents:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Categoria'
+ *          404:
+ *            description: Recurso no encontrado
+ *          400:
+ *            description: ¿Cuál es el error?
+ */
 router.get('/:id', getCategoria, function(pet, resp) {
     resp.status(200);
     resp.setHeader('Content-Type', 'application/json');

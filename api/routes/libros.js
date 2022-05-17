@@ -7,6 +7,66 @@ const Libro = require('../models/libro');
 const User = require('../models/user');
 const { chequeaJWT } = require("../utils/auth");
 
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *      Libro:
+ *          type: object
+ *          required:
+ *              - titulo
+ *              - precio
+ *              - autor
+ *              - categoria
+ *              - disponible
+ *              - vendedor
+ *          properties:
+ *              id:
+ *                  type: string
+ *                  description: ID autogenerado del libro
+ *              titulo:
+ *                  type: string
+ *                  description: Título del libro
+ *              precio:
+ *                  type: double
+ *                  description: Precio del libro
+ *              autor:
+ *                  type: string
+ *                  description: Autor del libro
+ *              categoria:
+ *                  type: string
+ *                  description: ID de la categoria a la que pertenece
+ *              disponible:
+ *                  type: boolean
+ *                  description: Verdadero (si el libro se encuentra a la venta) o falso
+ *              vendedor:
+ *                  type: string
+ *                  description: ID del usuario que lo ha publicado
+ *          example:
+ *              id: 6242c4d343de650304df4c9a
+ *              titulo: Encuentra tu persona vitamina
+ *              precio: 18.9
+ *              autor: Marian Rojas
+ *              categoria: 6242c38a8de0ff314ecca275
+ *              disponible: true
+ *              vendedor: 627e0c45a5b4f89db9f0cac5
+ *      Error:
+ *          type: object
+ *          properties:
+ *              error:
+ *                  type: integer
+ *                  description: Código de error
+ *              mensaje:
+ *                  type: string
+ *                  description: Mensaje descriptivo del error
+ *              required:
+ *                  - error
+ *                  - mensaje
+ *          example:
+ *              error: 4
+ *              mensaje: Falta algún campo por rellenar
+ */
+
 // CASO DE USO: Un usuario sin estar autentificado debe poder ver todos los libros del sitio
 router.get('/', resultadosPaginados(Libro), async function(pet, resp) {
     resp.status(200);
@@ -14,7 +74,45 @@ router.get('/', resultadosPaginados(Libro), async function(pet, resp) {
     resp.send(resp.resultadosPaginados);
 });
 
-// CASO DE USO: Un usuario sin estar autentificado debe poder ver todos los datos de un libro
+/**
+ * @swagger
+ * /api/libros/{id}:
+ *  get:
+ *      summary: Obtener libro por ID
+ *      tags: [Libros]
+ *      parameters:
+ *          - in: path
+ *            name: id
+ *            schema:
+ *              type: string
+ *            required: true
+ *            description: ID del libro
+ *      responses:
+ *          200:
+ *              description: OK
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Libro'
+ *          400:
+ *              description: Datos incorrectos o falta algún campo
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Error'
+ *          404:
+ *              description: Recurso no encontrado
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Error'
+ *          500:
+ *              description: Error del servidor
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Error'
+ */
 router.get('/:id', getLibro, async function(pet, resp) {
     resp.status(200);
     resp.setHeader('Content-Type', 'application/json');
@@ -121,7 +219,41 @@ router.patch("/:id", chequeaJWT, getLibro, async function(pet, resp) {
     }
 });
 
-// CASO DE USO:	Un usuario autentificado debe poder borrar un libro que ya haya subido
+/**
+ * @swagger
+ * /api/libros/{id}:
+ *  delete:
+ *      summary: Borrar libro por ID
+ *      tags: [Libros]
+ *      parameters:
+ *          - in: path
+ *            name: id
+ *            schema:
+ *              type: string
+ *            required: true
+ *            description: ID del libro
+ *      responses:
+ *          204:
+ *              description: Libro borrado con éxito
+ *          400:
+ *              description: Datos incorrectos o falta algún campo
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Error'
+ *          404:
+ *              description: Recurso no encontrado
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Error'
+ *          500:
+ *              description: Error del servidor
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Error'
+ */
 router.delete('/:id', chequeaJWT, getLibro, async function(pet, resp) {
     try {
         await resp.libro.remove();        
