@@ -77,60 +77,292 @@ router.get('/', resultadosPaginados(Libro), async function(pet, resp) {
 
 /**
  * @swagger
- * /api/libros/{id}:
- *  get:
- *      summary: Obtener libro por ID
- *      tags: [Libros]
- *      parameters:
- *          - in: path
- *            name: id
- *            schema:
- *              type: string
- *            required: true
- *            description: ID del libro
- *      responses:
- *          200:
- *              description: Ok
+ * paths:
+ *  /api/libros:
+ *      post:
+ *          summary: Publicar nuevo libro
+ *          tags: [Libros]
+ *          requestBody:
+ *              required: true
  *              content:
  *                  application/json:
  *                      schema:
- *                          $ref: '#/components/schemas/Libro'
- *          400:
- *              description: Datos incorrectos o falta algún campo
+ *                          type: object
+ *                          properties:
+ *                              titulo:
+ *                                  type: string
+ *                                  example: Reina roja
+ *                              precio:
+ *                                  type: double
+ *                                  example: 10.95
+ *                              autor:
+ *                                  type: string
+ *                                  example: Juan Gómez Jurado
+ *                              categoria:
+ *                                  type: string
+ *                                  example: 620955d4da2b453f712e4e82 
+ *                          required:
+ *                              - titulo
+ *                              - precio
+ *                              - autor
+ *                              - categoria 
+ *          responses:
+ *              201:
+ *                  description: Libro publicado con éxito
+ *                  content: 
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/Libro'
+ *                  headers:
+ *                      Location:
+ *                          type: string
+ *                          description: URL del nuevo libro
+ *              400:
+ *                  description: Datos incorrectos o falta algún campo
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/Error'
+ *                          examples:
+ *                              cod4:
+ *                                  summary: Código de error 4
+ *                                  value:
+ *                                      error: 4
+ *                                      mensaje: Falta algún campo por rellenar
+ *                              cod7:
+ *                                  summary: Código de error 7
+ *                                  value:
+ *                                      error: 7
+ *                                      mensaje: No es una cadena de texto
+ *                              cod8:
+ *                                  summary: Código de error 8
+ *                                  value:
+ *                                      error: 8
+ *                                      mensaje: No es un número
+ *              403:
+ *                  description: No tienes permisos
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/Error'
+ *                          examples:
+ *                              cod12:
+ *                                  summary: Código de error 12
+ *                                  value:
+ *                                      error: 12
+ *                                      mensaje: No tienes permisos
+ *              500:
+ *                  description: Error del servidor
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/Error'
+ *                          examples:
+ *                              cod6:
+ *                                  summary: Código de error 6
+ *                                  value:
+ *                                      error: 6
+ *                                      mensaje: Error del servidor
+ *  /api/libros/{id}:
+ *      get:
+ *          summary: Obtener libro por ID
+ *          tags: [Libros]
+ *          parameters:
+ *              - in: path
+ *                name: id
+ *                schema:
+ *                  type: string
+ *                required: true
+ *                description: ID del libro
+ *          responses:
+ *              200:
+ *                  description: Ok
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/Libro'
+ *              400:
+ *                  description: Datos incorrectos o falta algún campo
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/Error'
+ *                          examples:
+ *                              cod2:
+ *                                  summary: Código de error 2
+ *                                  value:
+ *                                      error: 2
+ *                                      mensaje: No es un ID válido (longitud de 24 en hexadecimal)
+ *              404:
+ *                  description: Recurso no encontrado
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/Error'
+ *                          examples:
+ *                              cod1:
+ *                                  summary: Código de error 1
+ *                                  value:
+ *                                      error: 1
+ *                                      mensaje: Recurso no encontrado
+ *              500:
+ *                  description: Error del servidor
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/Error'
+ *                          examples:
+ *                              cod6:
+ *                                  summary: Código de error 6
+ *                                  value:
+ *                                      error: 6
+ *                                      mensaje: Error del servidor
+ *      patch:
+ *          summary: Actualizar libro por ID
+ *          tags: [Libros]
+ *          parameters:
+ *              - in: path
+ *                name: id
+ *                schema:
+ *                  type: string
+ *                required: true
+ *                description: ID del libro
+ *          requestBody:
+ *              required: true
  *              content:
  *                  application/json:
  *                      schema:
- *                          $ref: '#/components/schemas/Error'
- *                      examples:
- *                          cod2:
- *                              summary: Código de error 2
- *                              value:
- *                                  error: 2
- *                                  mensaje: No es un ID válido (longitud de 24 en hexadecimal)
- *          404:
- *              description: Recurso no encontrado
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Error'
- *                      examples:
- *                          cod1:
- *                              summary: Código de error 1
- *                              value:
- *                                  error: 1
- *                                  mensaje: Recurso no encontrado
- *          500:
- *              description: Error del servidor
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Error'
- *                      examples:
- *                          cod6:
- *                              summary: Código de error 6
- *                              value:
- *                                  error: 6
- *                                  mensaje: Error del servidor
+ *                          type: object
+ *                          properties:
+ *                              titulo:
+ *                                  type: string
+ *                                  example: Los pilares de la tierra
+ *                              precio:
+ *                                  type: double
+ *                                  example: 20.94
+ *                              autor:
+ *                                  type: string
+ *                                  example: Ken Follet
+ *                              disponible:
+ *                                  type: boolean
+ *                                  example: false 
+ *          responses:
+ *              204:
+ *                  description: Libro actualizado con éxito
+ *              400:
+ *                  description: Datos incorrectos o falta algún campo
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/Error'
+ *                          examples:
+ *                              cod2:
+ *                                  summary: Código de error 2
+ *                                  value:
+ *                                      error: 2
+ *                                      mensaje: No es un ID válido (longitud de 24 en hexadecimal)
+ *                              cod8:
+ *                                  summary: Código de error 8
+ *                                  value:
+ *                                      error: 8
+ *                                      mensaje: No es un número
+ *              403:
+ *                  description: No tienes permisos
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/Error'
+ *                          examples:
+ *                              cod12:
+ *                                  summary: Código de error 12
+ *                                  value:
+ *                                      error: 12
+ *                                      mensaje: No tienes permisos
+ *              404:
+ *                  description: Recurso no encontrado
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/Error'
+ *                          examples:
+ *                              cod1:
+ *                                  summary: Código de error 1
+ *                                  value:
+ *                                      error: 1
+ *                                      mensaje: Recurso no encontrado
+ *              500:
+ *                  description: Error del servidor
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/Error'
+ *                          examples:
+ *                              cod6:
+ *                                  summary: Código de error 6
+ *                                  value:
+ *                                      error: 6
+ *                                      mensaje: Error del servidor
+ *      delete:
+ *          summary: Borrar libro por ID
+ *          tags: [Libros]
+ *          parameters:
+ *              - in: path
+ *                name: id
+ *                schema:
+ *                  type: string
+ *                required: true
+ *                description: ID del libro
+ *          responses:
+ *              204:
+ *                  description: Libro borrado con éxito
+ *              400:
+ *                  description: Datos incorrectos o falta algún campo
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/Error'
+ *                          examples:
+ *                              cod2:
+ *                                  summary: Código de error 2
+ *                                  value:
+ *                                      error: 2
+ *                                      mensaje: No es un ID válido (longitud de 24 en hexadecimal)
+ *              403:
+ *                  description: No tienes permisos
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/Error'
+ *                          examples:
+ *                              cod12:
+ *                                  summary: Código de error 12
+ *                                  value:
+ *                                      error: 12
+ *                                      mensaje: No tienes permisos
+ *              404:
+ *                  description: Recurso no encontrado
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/Error'
+ *                          examples:
+ *                              cod1:
+ *                                  summary: Código de error 1
+ *                                  value:
+ *                                      error: 1
+ *                                      mensaje: Recurso no encontrado
+ *              500:
+ *                  description: Error del servidor
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/Error'
+ *                          examples:
+ *                              cod6:
+ *                                  summary: Código de error 6
+ *                                  value:
+ *                                      error: 6
+ *                                      mensaje: Error del servidor
  */
 router.get('/:id', getLibro, async function(pet, resp) {
     resp.status(200);
@@ -138,94 +370,6 @@ router.get('/:id', getLibro, async function(pet, resp) {
     resp.send(resp.libro);
 });
 
-/**
- * @swagger
- * /api/libros:
- *  post:
- *      summary: Publicar nuevo libro
- *      tags: [Libros]
- *      requestBody:
- *          required: true
- *          content:
- *              application/json:
- *                  schema:
- *                      type: object
- *                      properties:
- *                          titulo:
- *                              type: string
- *                              example: Reina roja
- *                          precio:
- *                              type: double
- *                              example: 10.95
- *                          autor:
- *                              type: string
- *                              example: Juan Gómez Jurado
- *                          categoria:
- *                              type: string
- *                              example: 620955d4da2b453f712e4e82 
- *                      required:
- *                          - titulo
- *                          - precio
- *                          - autor
- *                          - categoria 
- *      responses:
- *          201:
- *              description: Libro publicado con éxito
- *              content: 
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Libro'
- *              headers:
- *                  Location:
- *                      type: string
- *                      description: URL del nuevo libro
- *          400:
- *              description: Datos incorrectos o falta algún campo
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Error'
- *                      examples:
- *                          cod4:
- *                              summary: Código de error 4
- *                              value:
- *                                  error: 4
- *                                  mensaje: Falta algún campo por rellenar
- *                          cod7:
- *                              summary: Código de error 7
- *                              value:
- *                                  error: 7
- *                                  mensaje: No es una cadena de texto
- *                          cod8:
- *                              summary: Código de error 8
- *                              value:
- *                                  error: 8
- *                                  mensaje: No es un número
- *          403:
- *              description: No tienes permisos
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Error'
- *                      examples:
- *                          cod12:
- *                              summary: Código de error 12
- *                              value:
- *                                  error: 12
- *                                  mensaje: No tienes permisos
- *          500:
- *              description: Error del servidor
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Error'
- *                      examples:
- *                          cod6:
- *                              summary: Código de error 6
- *                              value:
- *                                  error: 6
- *                                  mensaje: Error del servidor
- */
 router.post('/', chequeaJWT, async function(pet, resp) {
     var precio = parseFloat(pet.body.precio);
     if (!pet.body.titulo || !pet.body.precio) {
@@ -290,95 +434,6 @@ router.post('/', chequeaJWT, async function(pet, resp) {
     }
 });
 
-/**
- * @swagger
- * /api/libros/{id}:
- *  patch:
- *      summary: Actualizar libro por ID
- *      tags: [Libros]
- *      parameters:
- *          - in: path
- *            name: id
- *            schema:
- *              type: string
- *            required: true
- *            description: ID del libro
- *      requestBody:
- *          required: true
- *          content:
- *              application/json:
- *                  schema:
- *                      type: object
- *                      properties:
- *                          titulo:
- *                              type: string
- *                              example: Los pilares de la tierra
- *                          precio:
- *                              type: double
- *                              example: 20.94
- *                          autor:
- *                              type: string
- *                              example: Ken Follet
- *                          disponible:
- *                              type: boolean
- *                              example: false 
- *      responses:
- *          204:
- *              description: Libro actualizado con éxito
- *          400:
- *              description: Datos incorrectos o falta algún campo
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Error'
- *                      examples:
- *                          cod2:
- *                              summary: Código de error 2
- *                              value:
- *                                  error: 2
- *                                  mensaje: No es un ID válido (longitud de 24 en hexadecimal)
- *                          cod8:
- *                              summary: Código de error 8
- *                              value:
- *                                  error: 8
- *                                  mensaje: No es un número
- *          403:
- *              description: No tienes permisos
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Error'
- *                      examples:
- *                          cod12:
- *                              summary: Código de error 12
- *                              value:
- *                                  error: 12
- *                                  mensaje: No tienes permisos
- *          404:
- *              description: Recurso no encontrado
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Error'
- *                      examples:
- *                          cod1:
- *                              summary: Código de error 1
- *                              value:
- *                                  error: 1
- *                                  mensaje: Recurso no encontrado
- *          500:
- *              description: Error del servidor
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Error'
- *                      examples:
- *                          cod6:
- *                              summary: Código de error 6
- *                              value:
- *                                  error: 6
- *                                  mensaje: Error del servidor
- */
 router.patch("/:id", chequeaJWT, getLibro, async function(pet, resp) {
     if (pet.body.titulo != null) {
         resp.libro.titulo = pet.body.titulo;
@@ -416,71 +471,6 @@ router.patch("/:id", chequeaJWT, getLibro, async function(pet, resp) {
     }
 });
 
-/**
- * @swagger
- * /api/libros/{id}:
- *  delete:
- *      summary: Borrar libro por ID
- *      tags: [Libros]
- *      parameters:
- *          - in: path
- *            name: id
- *            schema:
- *              type: string
- *            required: true
- *            description: ID del libro
- *      responses:
- *          204:
- *              description: Libro borrado con éxito
- *          400:
- *              description: Datos incorrectos o falta algún campo
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Error'
- *                      examples:
- *                          cod2:
- *                              summary: Código de error 2
- *                              value:
- *                                  error: 2
- *                                  mensaje: No es un ID válido (longitud de 24 en hexadecimal)
- *          403:
- *              description: No tienes permisos
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Error'
- *                      examples:
- *                          cod12:
- *                              summary: Código de error 12
- *                              value:
- *                                  error: 12
- *                                  mensaje: No tienes permisos
- *          404:
- *              description: Recurso no encontrado
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Error'
- *                      examples:
- *                          cod1:
- *                              summary: Código de error 1
- *                              value:
- *                                  error: 1
- *                                  mensaje: Recurso no encontrado
- *          500:
- *              description: Error del servidor
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Error'
- *                      examples:
- *                          cod6:
- *                              summary: Código de error 6
- *                              value:
- *                                  error: 6
- *                                  mensaje: Error del servidor
- */
 router.delete('/:id', chequeaJWT, getLibro, async function(pet, resp) {
     try {
         await resp.libro.remove();        

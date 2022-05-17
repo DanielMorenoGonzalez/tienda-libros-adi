@@ -83,6 +83,10 @@ const User = require('../models/user');
  *                      application/json:
  *                          schema:
  *                              $ref: '#/components/schemas/User'
+ *                  headers:
+ *                      Location:
+ *                          type: string
+ *                          description: URL del nuevo usuario
  *              400:
  *                  description: Datos incorrectos o falta algún campo
  *                  content:
