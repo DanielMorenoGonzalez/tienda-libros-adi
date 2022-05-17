@@ -79,6 +79,65 @@ router.get('/', resultadosPaginados(Libro), async function(pet, resp) {
  * @swagger
  * paths:
  *  /api/libros:
+ *      get:
+ *          summary: Obtener un listado de los libros por paginación
+ *          tags: [Libros]
+ *          parameters:
+ *              - in: query
+ *                name: limit
+ *                schema:
+ *                  type: integer
+ *                description: Número de libros a mostrar
+ *              - in: query
+ *                name: offset
+ *                schema:
+ *                  type: integer
+ *                description: Número de libros a saltar antes de empezar a mostrar la colección    
+ *          responses:
+ *              200:
+ *                  description: Ok
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              type: object
+ *                              properties:
+ *                                  total:
+ *                                      type: integer
+ *                                      example: 9
+ *                                  count:
+ *                                      type: integer
+ *                                      example: 1
+ *                                  currentPage:
+ *                                      type: integer
+ *                                      example: 1
+ *                                  totalPages:
+ *                                      type: integer
+ *                                      example: 9
+ *                                  pagination:
+ *                                      type: object
+ *                                      properties:
+ *                                          next:
+ *                                              type: string
+ *                                              example: http://localhost:3000/api/categorias?limit=1&offset=1
+ *                                          previous:
+ *                                              type: ['null', string]
+ *                                              example: null
+ *                                  results:
+ *                                      type: array
+ *                                      items:
+ *                                          $ref: '#/components/schemas/Libro'
+ *              500:
+ *                  description: Error del servidor
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/Error'
+ *                          examples:
+ *                              cod6:
+ *                                  summary: Código de error 6
+ *                                  value:
+ *                                      error: 6
+ *                                      mensaje: Error del servidor
  *      post:
  *          summary: Publicar nuevo libro
  *          tags: [Libros]

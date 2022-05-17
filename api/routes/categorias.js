@@ -42,14 +42,45 @@ const { resultadosPaginados } = require('../routes/libros');
  *                name: limit
  *                schema:
  *                  type: integer
- *                description: Número de recursos a mostrar
+ *                description: Número de categorías a mostrar
  *              - in: query
  *                name: offset
  *                schema:
  *                  type: integer
- *                description: Número de items a saltar antes de empezar a mostrar la colección    
+ *                description: Número de categorías a saltar antes de empezar a mostrar la colección    
  *          responses:
  *              200:
+ *                  description: Ok
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              type: object
+ *                              properties:
+ *                                  total:
+ *                                      type: integer
+ *                                      example: 4
+ *                                  count:
+ *                                      type: integer
+ *                                      example: 1
+ *                                  currentPage:
+ *                                      type: integer
+ *                                      example: 1
+ *                                  totalPages:
+ *                                      type: integer
+ *                                      example: 4
+ *                                  pagination:
+ *                                      type: object
+ *                                      properties:
+ *                                          next:
+ *                                              type: string
+ *                                              example: http://localhost:3000/api/categorias?limit=1&offset=1
+ *                                          previous:
+ *                                              type: ['null', string]
+ *                                              example: null
+ *                                  results:
+ *                                      type: array
+ *                                      items:
+ *                                          $ref: '#/components/schemas/Categoria'
  *              500:
  *                  description: Error del servidor
  *                  content:
@@ -123,63 +154,6 @@ router.get('/', resultadosPaginados(Categoria), async function(pet, resp) {
     resp.send(resp.resultadosPaginados);
 });
 
-/**
- * @swagger
- * /api/categorias/{id}:
- *  get:
- *      summary: Obtener una categoría por su ID
- *      tags: [Categorias]
- *      parameters:
- *          - in: path
- *            name: id
- *            schema:
- *              type: string
- *            required: true
- *            description: ID de la categoría
- *      responses:
- *          200:
- *            description: Ok
- *            contents:
- *              application/json:
- *                  schema:
- *                      $ref: '#/components/schemas/Categoria'
- *          400:
- *              description: Datos incorrectos o falta algún campo
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Error'
- *                      examples:
- *                          cod2:
- *                              summary: Código de error 2
- *                              value:
- *                                  error: 2
- *                                  mensaje: No es un ID válido (longitud de 24 en hexadecimal)
- *          404:
- *              description: Recurso no encontrado
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Error'
- *                      examples:
- *                          cod1:
- *                              summary: Código de error 1
- *                              value:
- *                                  error: 1
- *                                  mensaje: Recurso no encontrado
- *          500:
- *              description: Error del servidor
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Error'
- *                      examples:
- *                          cod6:
- *                              summary: Código de error 6
- *                              value:
- *                                  error: 6
- *                                  mensaje: Error del servidor
- */
 router.get('/:id', getCategoria, function(pet, resp) {
     resp.status(200);
     resp.setHeader('Content-Type', 'application/json');

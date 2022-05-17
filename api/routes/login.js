@@ -77,7 +77,6 @@ const moment = require('moment');  //para trabajar cómodamente con fechas
  *                                      error: 6
  *                                      mensaje: Error del servidor
  */
-// CASO DE USO: Un usuario debe poder hacer login
 router.post('/', async (pet, resp) => {
     if (!pet.body.username || !pet.body.password) {
         resp.status(400);
