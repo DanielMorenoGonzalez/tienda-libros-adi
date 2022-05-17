@@ -1,0 +1,1362 @@
+{
+	"info": {
+		"_postman_id": "4c09a78b-85f2-4805-80f5-46d99bef7680",
+		"name": "TiendaLibros",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Obtener todos los libros del sitio (SIN PAGINACIÓN)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Código de estado 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"La cabecera 'Content-Type' es 'application/json'\", () => {\r",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"    \"type\": \"array\",\r",
+							"    \"items\": { \"$ref\": \"libroSchema\" }\r",
+							"};\r",
+							"\r",
+							"var libroSchema = {\r",
+							"    \"type\": \"object\",\r",
+							"    \"properties\": {\r",
+							"        \"_id\": { \"type\": \"string\" },\r",
+							"        \"titulo\": { \"type\": \"string\" },\r",
+							"        \"precio\": { \"type\": \"number\" },\r",
+							"        \"autor\": { \"type\": \"string\" },\r",
+							"        \"categoria\": { \"type\": \"string\" },\r",
+							"        \"disponible\": { \"type\": \"boolean\" },\r",
+							"        \"vendedor\": { \"type\": \"string\" }\r",
+							"    }\r",
+							"};\r",
+							"\r",
+							"tv4.addSchema('libroSchema', libroSchema);\r",
+							"pm.test('El Schema es válido', function() {\r",
+							"  pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Libros sin paginación\", () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.length).to.eql(9);\r",
+							"    pm.expect(responseJson[2].titulo).to.eql(\"Nunca\");\r",
+							"    pm.expect(responseJson[2].autor).to.eql(\"Ken Follet\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/libros",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"libros"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener todos los libros del sitio (CON PAGINACIÓN)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Código de estado 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"La cabecera 'Content-Type' es 'application/json'\", () => {\r",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Libros con paginación\", () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.results.length).to.eql(3);\r",
+							"    pm.expect(responseJson.total).to.eql(9);\r",
+							"    pm.expect(responseJson.pagination.previous).to.eql(\"http://localhost:3000/api/categorias?limit=3&offset=2\");\r",
+							"    pm.expect(responseJson.pagination.next).to.eql(\"http://localhost:3000/api/categorias?limit=3&offset=8\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/libros?limit=3&offset=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"libros"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "3"
+						},
+						{
+							"key": "offset",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener los datos de un libro",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Código de estado 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"La cabecera 'Content-Type' es 'application/json'\", () => {\r",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+							"});\r",
+							"\r",
+							"const schema = {\r",
+							"    \"type\": \"object\",\r",
+							"    \"properties\": {\r",
+							"        \"_id\": { \"type\": \"string\" },\r",
+							"        \"titulo\": { \"type\": \"string\" },\r",
+							"        \"precio\": { \"type\": \"number\" },\r",
+							"        \"autor\": { \"type\": \"string\" },\r",
+							"        \"categoria\": { \"type\": \"string\" },\r",
+							"        \"disponible\": { \"type\": \"boolean\" }\r",
+							"    }\r",
+							"};\r",
+							"pm.test('El Schema es válido', function() {\r",
+							"    pm.response.to.have.jsonSchema(schema);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Libro 'Encuentra tu persona vitamina'\", () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.titulo).to.eql(\"Encuentra tu persona vitamina\");\r",
+							"    pm.expect(responseJson.precio).to.eql(18.9);\r",
+							"    pm.expect(responseJson.autor).to.eql(\"Marian Rojas\");\r",
+							"    pm.expect(responseJson.categoria).to.eql(\"6242c38a8de0ff314ecca275\");\r",
+							"    pm.expect(responseJson.disponible).to.eql(true);\r",
+							"    pm.expect(responseJson.vendedor).to.eql(\"627e0c45a5b4f89db9f0cac5\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/libros/6242c4d343de650304df4c9a",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"libros",
+						"6242c4d343de650304df4c9a"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ERROR 404: Obtener los datos de un libro",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Código de estado 404\", function () {\r",
+							"  pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"La cabecera 'Content-Type' es 'application/json'\", () => {\r",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Libro no encontrado\", () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.error).to.eql(1);\r",
+							"    pm.expect(responseJson.mensaje).to.eql(\"Recurso no encontrado\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/libros/6242c4d343de650304df4c9b",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"libros",
+						"6242c4d343de650304df4c9b"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ERROR 400: Obtener los datos de un libro",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Código de estado 400\", function () {\r",
+							"  pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"La cabecera 'Content-Type' es 'application/json'\", () => {\r",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"El ID del libro no tiene un formato válido\", () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.error).to.eql(2);\r",
+							"    pm.expect(responseJson.mensaje).to.eql(\"No es un ID válido (longitud de 24 en hexadecimal)\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/libros/6242c4d343de650304df4c9_",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"libros",
+						"6242c4d343de650304df4c9_"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener todas las categorías del sitio (SIN PAGINACIÓN)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Código de estado 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"La cabecera 'Content-Type' es 'application/json'\", () => {\r",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"    \"type\": \"array\",\r",
+							"    \"items\": { \"$ref\": \"categoriaSchema\" }\r",
+							"};\r",
+							"\r",
+							"var categoriaSchema = {\r",
+							"    \"type\": \"object\",\r",
+							"    \"properties\": {\r",
+							"        \"_id\": { \"type\": \"string\" },\r",
+							"        \"titulo\": { \"type\": \"string\" },\r",
+							"        \"libros\": { \"type\": \"array\" }\r",
+							"    }\r",
+							"};\r",
+							"\r",
+							"tv4.addSchema('categoriaSchema', categoriaSchema);\r",
+							"pm.test('El Schema es válido', function() {\r",
+							"  pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Categorias sin paginación\", () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.length).to.eql(4);\r",
+							"    pm.expect(responseJson[0].titulo).to.eql(\"Novela negra\");\r",
+							"    pm.expect(responseJson[0].libros.length).to.eql(3);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/categorias",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"categorias"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener todas las categorías del sitio (CON PAGINACIÓN)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Código de estado 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"La cabecera 'Content-Type' es 'application/json'\", () => {\r",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Categorias con paginación\", () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.results.length).to.eql(2);\r",
+							"    pm.expect(responseJson.total).to.eql(4);\r",
+							"    pm.expect(responseJson.pagination.next).to.eql(\"http://localhost:3000/api/categorias?limit=2&offset=2\");\r",
+							"    pm.expect(responseJson.pagination.previous).to.eql(null);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/categorias?limit=2&offset=0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"categorias"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "2"
+						},
+						{
+							"key": "offset",
+							"value": "0"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener los datos de una categoria",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Código de estado 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"La cabecera 'Content-Type' es 'application/json'\", () => {\r",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+							"});\r",
+							"\r",
+							"const schema = {\r",
+							"    \"type\": \"object\",\r",
+							"    \"properties\": {\r",
+							"        \"_id\": { \"type\": \"string\" },\r",
+							"        \"titulo\": { \"type\": \"string\" }\r",
+							"    }\r",
+							"};\r",
+							"pm.test('El Schema es válido', function() {\r",
+							"  pm.response.to.have.jsonSchema(schema);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Categoría 'Autoayuda'\", () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.titulo).to.eql(\"Autoayuda\");\r",
+							"    pm.expect(responseJson.libros.length).to.eql(2);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/categorias/6242c38a8de0ff314ecca275",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"categorias",
+						"6242c38a8de0ff314ecca275"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ERROR 404: Obtener los datos de una categoria",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Código de estado 404\", function () {\r",
+							"  pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"La cabecera 'Content-Type' es 'application/json'\", () => {\r",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Categoría no encontrada\", () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.error).to.eql(1);\r",
+							"    pm.expect(responseJson.mensaje).to.eql(\"Recurso no encontrado\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/categorias/6242c38a8de0ff314ecca273",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"categorias",
+						"6242c38a8de0ff314ecca273"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ERROR 400: Obtener los datos de una categoria",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Código de estado 400\", function () {\r",
+							"  pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"La cabecera 'Content-Type' es 'application/json'\", () => {\r",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"El ID de la categoría no es válido\", () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.error).to.eql(2);\r",
+							"    pm.expect(responseJson.mensaje).to.eql(\"No es un ID válido (longitud de 24 en hexadecimal)\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/categorias/6242c38a8de0ff314ecca275_",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"categorias",
+						"6242c38a8de0ff314ecca275_"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Añadir un libro",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Código de estado 201\", function () {\r",
+							"  pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"La cabecera 'Content-Type' es 'application/json'\", () => {\r",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"La cabecera 'Location' está presente\", () => {\r",
+							"  pm.response.to.have.header(\"Location\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Nuevo libro subido\", () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.titulo).to.eql(\"El hombre de tiza\");\r",
+							"    pm.expect(responseJson.precio).to.eql(9.45);\r",
+							"    pm.expect(responseJson.autor).to.eql(\"C.J. Tudor\");\r",
+							"    pm.expect(responseJson.categoria).to.eql(\"620955d4da2b453f712e4e82\");\r",
+							"    pm.expect(responseJson.disponible).to.eql(true);\r",
+							"    pm.expect(responseJson.vendedor).to.eql(\"627e0c6ea5b4f89db9f0cac9\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRhbWlwZXJlejkwIiwiZXhwIjoxNjUzMDUzMTQ0MzY3fQ.hyFQOX7BOb5nsjxH3m6wzckIzTdsRQHYSoYP7haclmc",
+						"description": "token",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"titulo\": \"El hombre de tiza\",\r\n    \"precio\": 9.45,\r\n    \"autor\": \"C.J. Tudor\",\r\n    \"categoria\": \"620955d4da2b453f712e4e82\",\r\n    \"vendedor\": \"627e0c6ea5b4f89db9f0cac9\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/libros",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"libros"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ERROR 403: Añadir un libro",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Código de estado 403\", function () {\r",
+							"  pm.response.to.have.status(403);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"La cabecera 'Content-Type' es 'application/json'\", () => {\r",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"El usuario no tiene permisos\", () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.error).to.eql(12);\r",
+							"    pm.expect(responseJson.mensaje).to.eql(\"No tienes permisos\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ7.eyJ1c2VybmFtZSI6InRhbWlwZXJlejkwIiwiZXhwIjoxNjUzMDUzMTQ0MzY3fQ.hyFQOX7BOb5nsjxH3m6wzckIzTdsRQHYSoYP7haclmc",
+						"description": "token",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"titulo\": \"El hombre de tiza\",\r\n    \"precio\": \"esto debería ser numérico\",\r\n    \"autor\": \"C.J. Tudor\",\r\n    \"categoria\": \"620955d4da2b453f712e4e82\",\r\n    \"vendedor\": \"627e0c6ea5b4f89db9f0cac9\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/libros",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"libros"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ERROR 400: Añadir un libro",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Código de estado 400\", function () {\r",
+							"  pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"La cabecera 'Content-Type' es 'application/json'\", () => {\r",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"El precio no es numérico\", () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.error).to.eql(8);\r",
+							"    pm.expect(responseJson.mensaje).to.eql(\"No es un número\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRhbWlwZXJlejkwIiwiZXhwIjoxNjUzMDUzMTQ0MzY3fQ.hyFQOX7BOb5nsjxH3m6wzckIzTdsRQHYSoYP7haclmc",
+						"description": "token",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"titulo\": \"El hombre de tiza\",\r\n    \"precio\": \"esto debería ser numérico\",\r\n    \"autor\": \"C.J. Tudor\",\r\n    \"categoria\": \"620955d4da2b453f712e4e82\",\r\n    \"vendedor\": \"627e0c6ea5b4f89db9f0cac9\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/libros",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"libros"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actualizar datos de un libro",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Código de estado 204\", function () {\r",
+							"  pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRhbWlwZXJlejkwIiwiZXhwIjoxNjUzMDUzMTQ0MzY3fQ.hyFQOX7BOb5nsjxH3m6wzckIzTdsRQHYSoYP7haclmc",
+						"description": "token",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"precio\": 11.80\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/libros/6282c682a9bc42cd87d5285f",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"libros",
+						"6282c682a9bc42cd87d5285f"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ERROR 404: Actualizar datos de un libro",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Código de estado 404\", function () {\r",
+							"  pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"La cabecera 'Content-Type' es 'application/json'\", () => {\r",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Libro no encontrado\", () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.error).to.eql(1);\r",
+							"    pm.expect(responseJson.mensaje).to.eql(\"Recurso no encontrado\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRhbWlwZXJlejkwIiwiZXhwIjoxNjUzMDUzMTQ0MzY3fQ.hyFQOX7BOb5nsjxH3m6wzckIzTdsRQHYSoYP7haclmc",
+						"description": "token",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/api/libros/6242c4d343de650304df4c91",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"libros",
+						"6242c4d343de650304df4c91"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Eliminar un libro",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Código de estado 204\", function () {\r",
+							"  pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRhbWlwZXJlejkwIiwiZXhwIjoxNjUzMDUzMTQ0MzY3fQ.hyFQOX7BOb5nsjxH3m6wzckIzTdsRQHYSoYP7haclmc",
+						"description": "token",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/api/libros/6282c682a9bc42cd87d5285f",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"libros",
+						"6282c682a9bc42cd87d5285f"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener los datos de un usuario",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Código de estado 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"La cabecera 'Content-Type' es 'application/json'\", () => {\r",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+							"});\r",
+							"\r",
+							"const schema = {\r",
+							"    \"type\": \"object\",\r",
+							"    \"properties\": {\r",
+							"        \"_id\": { \"type\": \"string\" },\r",
+							"        \"nombre\": { \"type\": \"string\" },\r",
+							"        \"username\": { \"type\": \"string\" },\r",
+							"        \"email\": { \"type\": \"string\" },\r",
+							"        \"password\": { \"type\": \"string\" },\r",
+							"        \"libros\": { \"type\": \"array\" },\r",
+							"    }\r",
+							"};\r",
+							"\r",
+							"pm.test('El Schema es válido', function() {\r",
+							"  pm.response.to.have.jsonSchema(schema);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Usuario Daniel Moreno\", () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.email).to.eql(\"danimorenog_94@hotmail.com\");\r",
+							"    pm.expect(responseJson.libros.length).to.eql(5);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/users/danimoreno94",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"users",
+						"danimoreno94"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ERROR 404: Obtener los datos de un usuario",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Código de estado 404\", function () {\r",
+							"  pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"La cabecera 'Content-Type' es 'application/json'\", () => {\r",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Usuario no encontrado\", () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.error).to.eql(1);\r",
+							"    pm.expect(responseJson.mensaje).to.eql(\"Recurso no encontrado\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/users/saramartinez92",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"users",
+						"saramartinez92"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear cuenta de usuario",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Código de estado 201\", function () {\r",
+							"  pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"La cabecera 'Content-Type' es 'application/json'\", () => {\r",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"La cabecera 'Location' está presente\", () => {\r",
+							"  pm.response.to.have.header(\"Location\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Nuevo usuario 'carper92' creado\", () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.nombre).to.eql(\"Carlos Pérez\");\r",
+							"    pm.expect(responseJson.email).to.eql(\"carper_92@hotmail.com\");\r",
+							"    pm.expect(responseJson.username).to.eql(\"carper92\");\r",
+							"    pm.expect(responseJson.libros).to.be.empty;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nombre\": \"Carlos Pérez\",\r\n    \"username\": \"carper92\",\r\n    \"email\": \"carper_92@hotmail.com\",\r\n    \"password\": \"123456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ERROR 409: Crear cuenta de usuario",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Código de estado 409\", function () {\r",
+							"  pm.response.to.have.status(409);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"La cabecera 'Content-Type' es 'application/json'\", () => {\r",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Email 'danimorenog_94@hotmail.com' ya existe\", () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.error).to.eql(10);\r",
+							"    pm.expect(responseJson.mensaje).to.eql(\"El email ya existe\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nombre\": \"Carlos Mora\",\r\n    \"username\": \"carlosmora91\",\r\n    \"email\": \"danimorenog_94@hotmail.com\",\r\n    \"password\": \"123456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ERROR 400: Crear cuenta de usuario",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Código de estado 400\", function () {\r",
+							"  pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"La cabecera 'Content-Type' es 'application/json'\", () => {\r",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Falta campo contraseña\", () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.error).to.eql(4);\r",
+							"    pm.expect(responseJson.mensaje).to.eql(\"Falta algún campo por rellenar\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nombre\": \"Carlos Mora\",\r\n    \"username\": \"carlosmora91\",\r\n    \"email\": \"danimorenog_94@hotmail.com\",\r\n    \"password\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Código de estado 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"La cabecera 'Content-Type' es 'application/json'\", () => {\r",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Login correcto de TAMARA\", () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson).to.be.a('object').and.not.be.empty;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"tamiperez90\",\r\n    \"password\": \"123456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ERROR 401: Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Código de estado 401\", function () {\r",
+							"  pm.response.to.have.status(401);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"La cabecera 'Content-Type' es 'application/json'\", () => {\r",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Login incorrecto\", () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.error).to.eql(11);\r",
+							"    pm.expect(responseJson.mensaje).to.eql(\"Username o contraseña incorrectos\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"tamiperez92\",\r\n    \"password\": \"123456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Dani compra un libro a Tamara",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Código de estado 201\", function () {\r",
+							"  pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"La cabecera 'Content-Type' es 'application/json'\", () => {\r",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"La cabecera 'Location' está presente\", () => {\r",
+							"  pm.response.to.have.header(\"Location\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"DANI compra un libro a Tamara\", () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.vendedor).to.eql(\"627e0c6ea5b4f89db9f0cac9\");\r",
+							"    pm.expect(responseJson.libro).to.eql(\"6242c55e43de650304df4ca6\");\r",
+							"    pm.expect(responseJson.valoracion).to.eql(5);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRhbWlwZXJlejkwIiwiZXhwIjoxNjUzMDUzMTQ0MzY3fQ.hyFQOX7BOb5nsjxH3m6wzckIzTdsRQHYSoYP7haclmc",
+						"description": "token",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"vendedor\": \"627e0c6ea5b4f89db9f0cac9\",\r\n    \"comprador\": \"627e0c45a5b4f89db9f0cac5\",\r\n    \"libro\": \"6242c55e43de650304df4ca6\",\r\n    \"valoracion\": 5\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/compras",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"compras"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ERROR 400: Dani compra un libro a Tamara",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Código de estado 400\", function () {\r",
+							"  pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"La cabecera 'Content-Type' es 'application/json'\", () => {\r",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"DANI compra un libro que NO está disponible\", () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.error).to.eql(14);\r",
+							"    pm.expect(responseJson.mensaje).to.eql(\"El libro no está disponible a la venta\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRhbWlwZXJlejkwIiwiZXhwIjoxNjUzMDUzMTQ0MzY3fQ.hyFQOX7BOb5nsjxH3m6wzckIzTdsRQHYSoYP7haclmc",
+						"description": "token",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"vendedor\": \"627e0c6ea5b4f89db9f0cac9\",\r\n    \"comprador\": \"627e0c45a5b4f89db9f0cac5\",\r\n    \"libro\": \"6242c55e43de650304df4ca6\",\r\n    \"valoracion\": 5\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/compras",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"compras"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

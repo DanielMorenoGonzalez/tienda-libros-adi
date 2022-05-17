@@ -1,0 +1,1117 @@
+{
+	"id": "6d2661fe-f7f2-4f58-a6e7-9385558d9404",
+	"name": "TiendaLibros",
+	"timestamp": "2022-05-16T21:44:11.926Z",
+	"collection_id": "0-4c09a78b-85f2-4805-80f5-46d99bef7680",
+	"folder_id": 0,
+	"environment_id": "0",
+	"totalPass": 79,
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "9f825271-2cf2-42da-b3ff-07bbcbf1a714",
+			"name": "Obtener todos los libros del sitio (SIN PAGINACIÓN)",
+			"url": "http://localhost:3000/api/libros",
+			"time": 71,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Código de estado 200": true,
+				"La cabecera 'Content-Type' es 'application/json'": true,
+				"El Schema es válido": true,
+				"Libros sin paginación": true
+			},
+			"testPassFailCounts": {
+				"Código de estado 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"La cabecera 'Content-Type' es 'application/json'": {
+					"pass": 1,
+					"fail": 0
+				},
+				"El Schema es válido": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Libros sin paginación": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				71
+			],
+			"allTests": [
+				{
+					"Código de estado 200": true,
+					"La cabecera 'Content-Type' es 'application/json'": true,
+					"El Schema es válido": true,
+					"Libros sin paginación": true
+				}
+			]
+		},
+		{
+			"id": "0511d0ff-a33a-444b-a10a-3447545b4183",
+			"name": "Obtener todos los libros del sitio (CON PAGINACIÓN)",
+			"url": "http://localhost:3000/api/libros?limit=3&offset=5",
+			"time": 63,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Código de estado 200": true,
+				"La cabecera 'Content-Type' es 'application/json'": true,
+				"Libros con paginación": true
+			},
+			"testPassFailCounts": {
+				"Código de estado 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"La cabecera 'Content-Type' es 'application/json'": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Libros con paginación": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				63
+			],
+			"allTests": [
+				{
+					"Código de estado 200": true,
+					"La cabecera 'Content-Type' es 'application/json'": true,
+					"Libros con paginación": true
+				}
+			]
+		},
+		{
+			"id": "8b27b482-0caf-433b-9471-9007be13cf5e",
+			"name": "Obtener los datos de un libro",
+			"url": "http://localhost:3000/api/libros/6242c4d343de650304df4c9a",
+			"time": 38,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Código de estado 200": true,
+				"La cabecera 'Content-Type' es 'application/json'": true,
+				"El Schema es válido": true,
+				"Libro 'Encuentra tu persona vitamina'": true
+			},
+			"testPassFailCounts": {
+				"Código de estado 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"La cabecera 'Content-Type' es 'application/json'": {
+					"pass": 1,
+					"fail": 0
+				},
+				"El Schema es válido": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Libro 'Encuentra tu persona vitamina'": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				38
+			],
+			"allTests": [
+				{
+					"Código de estado 200": true,
+					"La cabecera 'Content-Type' es 'application/json'": true,
+					"El Schema es válido": true,
+					"Libro 'Encuentra tu persona vitamina'": true
+				}
+			]
+		},
+		{
+			"id": "b7773ed7-5b40-499b-af55-fe89503dd24c",
+			"name": "ERROR 404: Obtener los datos de un libro",
+			"url": "http://localhost:3000/api/libros/6242c4d343de650304df4c9b",
+			"time": 33,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"Código de estado 404": true,
+				"La cabecera 'Content-Type' es 'application/json'": true,
+				"Libro no encontrado": true
+			},
+			"testPassFailCounts": {
+				"Código de estado 404": {
+					"pass": 1,
+					"fail": 0
+				},
+				"La cabecera 'Content-Type' es 'application/json'": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Libro no encontrado": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				33
+			],
+			"allTests": [
+				{
+					"Código de estado 404": true,
+					"La cabecera 'Content-Type' es 'application/json'": true,
+					"Libro no encontrado": true
+				}
+			]
+		},
+		{
+			"id": "796bd0d4-2443-4fac-820c-e2e1c194127d",
+			"name": "ERROR 400: Obtener los datos de un libro",
+			"url": "http://localhost:3000/api/libros/6242c4d343de650304df4c9_",
+			"time": 4,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Código de estado 400": true,
+				"La cabecera 'Content-Type' es 'application/json'": true,
+				"El ID del libro no tiene un formato válido": true
+			},
+			"testPassFailCounts": {
+				"Código de estado 400": {
+					"pass": 1,
+					"fail": 0
+				},
+				"La cabecera 'Content-Type' es 'application/json'": {
+					"pass": 1,
+					"fail": 0
+				},
+				"El ID del libro no tiene un formato válido": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				4
+			],
+			"allTests": [
+				{
+					"Código de estado 400": true,
+					"La cabecera 'Content-Type' es 'application/json'": true,
+					"El ID del libro no tiene un formato válido": true
+				}
+			]
+		},
+		{
+			"id": "6d1712de-a1f9-441e-9402-2cf391716d1f",
+			"name": "Obtener todas las categorías del sitio (SIN PAGINACIÓN)",
+			"url": "http://localhost:3000/api/categorias",
+			"time": 34,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Código de estado 200": true,
+				"La cabecera 'Content-Type' es 'application/json'": true,
+				"El Schema es válido": true,
+				"Categorias sin paginación": true
+			},
+			"testPassFailCounts": {
+				"Código de estado 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"La cabecera 'Content-Type' es 'application/json'": {
+					"pass": 1,
+					"fail": 0
+				},
+				"El Schema es válido": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Categorias sin paginación": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				34
+			],
+			"allTests": [
+				{
+					"Código de estado 200": true,
+					"La cabecera 'Content-Type' es 'application/json'": true,
+					"El Schema es válido": true,
+					"Categorias sin paginación": true
+				}
+			]
+		},
+		{
+			"id": "35991c85-110a-4271-9469-2185c5aa1f6c",
+			"name": "Obtener todas las categorías del sitio (CON PAGINACIÓN)",
+			"url": "http://localhost:3000/api/categorias?limit=2&offset=0",
+			"time": 76,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Código de estado 200": true,
+				"La cabecera 'Content-Type' es 'application/json'": true,
+				"Categorias con paginación": true
+			},
+			"testPassFailCounts": {
+				"Código de estado 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"La cabecera 'Content-Type' es 'application/json'": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Categorias con paginación": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				76
+			],
+			"allTests": [
+				{
+					"Código de estado 200": true,
+					"La cabecera 'Content-Type' es 'application/json'": true,
+					"Categorias con paginación": true
+				}
+			]
+		},
+		{
+			"id": "ad53867e-ff5d-47b6-b11d-da573c674472",
+			"name": "Obtener los datos de una categoria",
+			"url": "http://localhost:3000/api/categorias/6242c38a8de0ff314ecca275",
+			"time": 92,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Código de estado 200": true,
+				"La cabecera 'Content-Type' es 'application/json'": true,
+				"El Schema es válido": true,
+				"Categoría 'Autoayuda'": true
+			},
+			"testPassFailCounts": {
+				"Código de estado 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"La cabecera 'Content-Type' es 'application/json'": {
+					"pass": 1,
+					"fail": 0
+				},
+				"El Schema es válido": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Categoría 'Autoayuda'": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				92
+			],
+			"allTests": [
+				{
+					"Código de estado 200": true,
+					"La cabecera 'Content-Type' es 'application/json'": true,
+					"El Schema es válido": true,
+					"Categoría 'Autoayuda'": true
+				}
+			]
+		},
+		{
+			"id": "57301ff9-c72a-4979-85da-2cb83555e517",
+			"name": "ERROR 404: Obtener los datos de una categoria",
+			"url": "http://localhost:3000/api/categorias/6242c38a8de0ff314ecca273",
+			"time": 33,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"Código de estado 404": true,
+				"La cabecera 'Content-Type' es 'application/json'": true,
+				"Categoría no encontrada": true
+			},
+			"testPassFailCounts": {
+				"Código de estado 404": {
+					"pass": 1,
+					"fail": 0
+				},
+				"La cabecera 'Content-Type' es 'application/json'": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Categoría no encontrada": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				33
+			],
+			"allTests": [
+				{
+					"Código de estado 404": true,
+					"La cabecera 'Content-Type' es 'application/json'": true,
+					"Categoría no encontrada": true
+				}
+			]
+		},
+		{
+			"id": "96395830-858a-4d01-9dfb-4366de2fe69f",
+			"name": "ERROR 400: Obtener los datos de una categoria",
+			"url": "http://localhost:3000/api/categorias/6242c38a8de0ff314ecca275_",
+			"time": 3,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Código de estado 400": true,
+				"La cabecera 'Content-Type' es 'application/json'": true,
+				"El ID de la categoría no es válido": true
+			},
+			"testPassFailCounts": {
+				"Código de estado 400": {
+					"pass": 1,
+					"fail": 0
+				},
+				"La cabecera 'Content-Type' es 'application/json'": {
+					"pass": 1,
+					"fail": 0
+				},
+				"El ID de la categoría no es válido": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				3
+			],
+			"allTests": [
+				{
+					"Código de estado 400": true,
+					"La cabecera 'Content-Type' es 'application/json'": true,
+					"El ID de la categoría no es válido": true
+				}
+			]
+		},
+		{
+			"id": "39a7169c-3982-42bd-80e9-d9e70b5ac0f2",
+			"name": "Añadir un libro",
+			"url": "http://localhost:3000/api/libros",
+			"time": 173,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Código de estado 201": true,
+				"La cabecera 'Content-Type' es 'application/json'": true,
+				"La cabecera 'Location' está presente": true,
+				"Nuevo libro subido": true
+			},
+			"testPassFailCounts": {
+				"Código de estado 201": {
+					"pass": 1,
+					"fail": 0
+				},
+				"La cabecera 'Content-Type' es 'application/json'": {
+					"pass": 1,
+					"fail": 0
+				},
+				"La cabecera 'Location' está presente": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Nuevo libro subido": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				173
+			],
+			"allTests": [
+				{
+					"Código de estado 201": true,
+					"La cabecera 'Content-Type' es 'application/json'": true,
+					"La cabecera 'Location' está presente": true,
+					"Nuevo libro subido": true
+				}
+			]
+		},
+		{
+			"id": "79a2f331-1136-4eb9-83fa-21f2930bbcd5",
+			"name": "ERROR 403: Añadir un libro",
+			"url": "http://localhost:3000/api/libros",
+			"time": 4,
+			"responseCode": {
+				"code": 403,
+				"name": "Forbidden"
+			},
+			"tests": {
+				"Código de estado 403": true,
+				"La cabecera 'Content-Type' es 'application/json'": true,
+				"El usuario no tiene permisos": true
+			},
+			"testPassFailCounts": {
+				"Código de estado 403": {
+					"pass": 1,
+					"fail": 0
+				},
+				"La cabecera 'Content-Type' es 'application/json'": {
+					"pass": 1,
+					"fail": 0
+				},
+				"El usuario no tiene permisos": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				4
+			],
+			"allTests": [
+				{
+					"Código de estado 403": true,
+					"La cabecera 'Content-Type' es 'application/json'": true,
+					"El usuario no tiene permisos": true
+				}
+			]
+		},
+		{
+			"id": "b874e320-56d1-4292-878f-a5d10817a700",
+			"name": "ERROR 400: Añadir un libro",
+			"url": "http://localhost:3000/api/libros",
+			"time": 3,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Código de estado 400": true,
+				"La cabecera 'Content-Type' es 'application/json'": true,
+				"El precio no es numérico": true
+			},
+			"testPassFailCounts": {
+				"Código de estado 400": {
+					"pass": 1,
+					"fail": 0
+				},
+				"La cabecera 'Content-Type' es 'application/json'": {
+					"pass": 1,
+					"fail": 0
+				},
+				"El precio no es numérico": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				3
+			],
+			"allTests": [
+				{
+					"Código de estado 400": true,
+					"La cabecera 'Content-Type' es 'application/json'": true,
+					"El precio no es numérico": true
+				}
+			]
+		},
+		{
+			"id": "ad098cc8-e4c7-4e9a-84c9-f1852507f13f",
+			"name": "Actualizar datos de un libro",
+			"url": "http://localhost:3000/api/libros/6282c0b9a9bc42cd87d5280b",
+			"time": 77,
+			"responseCode": {
+				"code": 204,
+				"name": "No Content"
+			},
+			"tests": {
+				"Código de estado 204": true
+			},
+			"testPassFailCounts": {
+				"Código de estado 204": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				77
+			],
+			"allTests": [
+				{
+					"Código de estado 204": true
+				}
+			]
+		},
+		{
+			"id": "377875db-12c7-4a05-8812-45620f2c99fa",
+			"name": "ERROR 404: Actualizar datos de un libro",
+			"url": "http://localhost:3000/api/libros/6242c4d343de650304df4c91",
+			"time": 34,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"Código de estado 404": true,
+				"La cabecera 'Content-Type' es 'application/json'": true,
+				"Libro no encontrado": true
+			},
+			"testPassFailCounts": {
+				"Código de estado 404": {
+					"pass": 1,
+					"fail": 0
+				},
+				"La cabecera 'Content-Type' es 'application/json'": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Libro no encontrado": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				34
+			],
+			"allTests": [
+				{
+					"Código de estado 404": true,
+					"La cabecera 'Content-Type' es 'application/json'": true,
+					"Libro no encontrado": true
+				}
+			]
+		},
+		{
+			"id": "257fc4c4-3961-47a3-93ca-37707039da9d",
+			"name": "Eliminar un libro",
+			"url": "http://localhost:3000/api/libros/6282c0b9a9bc42cd87d5280b",
+			"time": 92,
+			"responseCode": {
+				"code": 204,
+				"name": "No Content"
+			},
+			"tests": {
+				"Código de estado 204": true
+			},
+			"testPassFailCounts": {
+				"Código de estado 204": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				92
+			],
+			"allTests": [
+				{
+					"Código de estado 204": true
+				}
+			]
+		},
+		{
+			"id": "41dd7fe7-639b-4795-a138-2bfd307e2bcd",
+			"name": "Obtener los datos de un usuario",
+			"url": "http://localhost:3000/api/users/danimoreno94",
+			"time": 32,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Código de estado 200": true,
+				"La cabecera 'Content-Type' es 'application/json'": true,
+				"El Schema es válido": true,
+				"Usuario Daniel Moreno": true
+			},
+			"testPassFailCounts": {
+				"Código de estado 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"La cabecera 'Content-Type' es 'application/json'": {
+					"pass": 1,
+					"fail": 0
+				},
+				"El Schema es válido": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Usuario Daniel Moreno": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				32
+			],
+			"allTests": [
+				{
+					"Código de estado 200": true,
+					"La cabecera 'Content-Type' es 'application/json'": true,
+					"El Schema es válido": true,
+					"Usuario Daniel Moreno": true
+				}
+			]
+		},
+		{
+			"id": "7ab39dda-8ad8-4d17-b01f-e4973274d8ed",
+			"name": "ERROR 404: Obtener los datos de un usuario",
+			"url": "http://localhost:3000/api/users/saramartinez92",
+			"time": 37,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"Código de estado 404": true,
+				"La cabecera 'Content-Type' es 'application/json'": true,
+				"Usuario no encontrado": true
+			},
+			"testPassFailCounts": {
+				"Código de estado 404": {
+					"pass": 1,
+					"fail": 0
+				},
+				"La cabecera 'Content-Type' es 'application/json'": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Usuario no encontrado": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				37
+			],
+			"allTests": [
+				{
+					"Código de estado 404": true,
+					"La cabecera 'Content-Type' es 'application/json'": true,
+					"Usuario no encontrado": true
+				}
+			]
+		},
+		{
+			"id": "7efebc00-d27e-46e1-ac05-0dd60a330245",
+			"name": "Crear cuenta de usuario",
+			"url": "http://localhost:3000/api/users",
+			"time": 157,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Código de estado 201": true,
+				"La cabecera 'Content-Type' es 'application/json'": true,
+				"La cabecera 'Location' está presente": true,
+				"Nuevo usuario 'carper92' creado": true
+			},
+			"testPassFailCounts": {
+				"Código de estado 201": {
+					"pass": 1,
+					"fail": 0
+				},
+				"La cabecera 'Content-Type' es 'application/json'": {
+					"pass": 1,
+					"fail": 0
+				},
+				"La cabecera 'Location' está presente": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Nuevo usuario 'carper92' creado": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				157
+			],
+			"allTests": [
+				{
+					"Código de estado 201": true,
+					"La cabecera 'Content-Type' es 'application/json'": true,
+					"La cabecera 'Location' está presente": true,
+					"Nuevo usuario 'carper92' creado": true
+				}
+			]
+		},
+		{
+			"id": "a845366d-ff8b-4167-b18e-5edf0156edf8",
+			"name": "ERROR 409: Crear cuenta de usuario",
+			"url": "http://localhost:3000/api/users",
+			"time": 86,
+			"responseCode": {
+				"code": 409,
+				"name": "Conflict"
+			},
+			"tests": {
+				"Código de estado 409": true,
+				"La cabecera 'Content-Type' es 'application/json'": true,
+				"Email 'danimorenog_94@hotmail.com' ya existe": true
+			},
+			"testPassFailCounts": {
+				"Código de estado 409": {
+					"pass": 1,
+					"fail": 0
+				},
+				"La cabecera 'Content-Type' es 'application/json'": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Email 'danimorenog_94@hotmail.com' ya existe": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				86
+			],
+			"allTests": [
+				{
+					"Código de estado 409": true,
+					"La cabecera 'Content-Type' es 'application/json'": true,
+					"Email 'danimorenog_94@hotmail.com' ya existe": true
+				}
+			]
+		},
+		{
+			"id": "258377a7-8802-45ec-850f-62772fcf907e",
+			"name": "ERROR 400: Crear cuenta de usuario",
+			"url": "http://localhost:3000/api/users",
+			"time": 4,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Código de estado 400": true,
+				"La cabecera 'Content-Type' es 'application/json'": true,
+				"Falta campo contraseña": true
+			},
+			"testPassFailCounts": {
+				"Código de estado 400": {
+					"pass": 1,
+					"fail": 0
+				},
+				"La cabecera 'Content-Type' es 'application/json'": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Falta campo contraseña": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				4
+			],
+			"allTests": [
+				{
+					"Código de estado 400": true,
+					"La cabecera 'Content-Type' es 'application/json'": true,
+					"Falta campo contraseña": true
+				}
+			]
+		},
+		{
+			"id": "ec60c57c-996a-4fb8-8fc2-905026aab9eb",
+			"name": "Login",
+			"url": "http://localhost:3000/api/login",
+			"time": 93,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Código de estado 200": true,
+				"La cabecera 'Content-Type' es 'application/json'": true,
+				"Login correcto de TAMARA": true
+			},
+			"testPassFailCounts": {
+				"Código de estado 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"La cabecera 'Content-Type' es 'application/json'": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Login correcto de TAMARA": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				93
+			],
+			"allTests": [
+				{
+					"Código de estado 200": true,
+					"La cabecera 'Content-Type' es 'application/json'": true,
+					"Login correcto de TAMARA": true
+				}
+			]
+		},
+		{
+			"id": "c078a988-c88a-425f-8518-a0a91c9020da",
+			"name": "ERROR 401: Login",
+			"url": "http://localhost:3000/api/login",
+			"time": 34,
+			"responseCode": {
+				"code": 401,
+				"name": "Unauthorized"
+			},
+			"tests": {
+				"Código de estado 401": true,
+				"La cabecera 'Content-Type' es 'application/json'": true,
+				"Login incorrecto": true
+			},
+			"testPassFailCounts": {
+				"Código de estado 401": {
+					"pass": 1,
+					"fail": 0
+				},
+				"La cabecera 'Content-Type' es 'application/json'": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Login incorrecto": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				34
+			],
+			"allTests": [
+				{
+					"Código de estado 401": true,
+					"La cabecera 'Content-Type' es 'application/json'": true,
+					"Login incorrecto": true
+				}
+			]
+		},
+		{
+			"id": "91306069-0651-4a26-a751-6dd50adfcf84",
+			"name": "Dani compra un libro a Tamara",
+			"url": "http://localhost:3000/api/compras",
+			"time": 165,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Código de estado 201": true,
+				"La cabecera 'Content-Type' es 'application/json'": true,
+				"La cabecera 'Location' está presente": true,
+				"DANI compra un libro a Tamara": true
+			},
+			"testPassFailCounts": {
+				"Código de estado 201": {
+					"pass": 1,
+					"fail": 0
+				},
+				"La cabecera 'Content-Type' es 'application/json'": {
+					"pass": 1,
+					"fail": 0
+				},
+				"La cabecera 'Location' está presente": {
+					"pass": 1,
+					"fail": 0
+				},
+				"DANI compra un libro a Tamara": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				165
+			],
+			"allTests": [
+				{
+					"Código de estado 201": true,
+					"La cabecera 'Content-Type' es 'application/json'": true,
+					"La cabecera 'Location' está presente": true,
+					"DANI compra un libro a Tamara": true
+				}
+			]
+		},
+		{
+			"id": "7d325338-1455-47c4-ae09-a03e486f8db3",
+			"name": "ERROR 400: Dani compra un libro a Tamara",
+			"url": "http://localhost:3000/api/compras",
+			"time": 93,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Código de estado 400": true,
+				"La cabecera 'Content-Type' es 'application/json'": true,
+				"DANI compra un libro que NO está disponible": true
+			},
+			"testPassFailCounts": {
+				"Código de estado 400": {
+					"pass": 1,
+					"fail": 0
+				},
+				"La cabecera 'Content-Type' es 'application/json'": {
+					"pass": 1,
+					"fail": 0
+				},
+				"DANI compra un libro que NO está disponible": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				93
+			],
+			"allTests": [
+				{
+					"Código de estado 400": true,
+					"La cabecera 'Content-Type' es 'application/json'": true,
+					"DANI compra un libro que NO está disponible": true
+				}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 1531,
+	"collection": {
+		"requests": [
+			{
+				"id": "9f825271-2cf2-42da-b3ff-07bbcbf1a714",
+				"method": "GET"
+			},
+			{
+				"id": "0511d0ff-a33a-444b-a10a-3447545b4183",
+				"method": "GET"
+			},
+			{
+				"id": "8b27b482-0caf-433b-9471-9007be13cf5e",
+				"method": "GET"
+			},
+			{
+				"id": "b7773ed7-5b40-499b-af55-fe89503dd24c",
+				"method": "GET"
+			},
+			{
+				"id": "796bd0d4-2443-4fac-820c-e2e1c194127d",
+				"method": "GET"
+			},
+			{
+				"id": "6d1712de-a1f9-441e-9402-2cf391716d1f",
+				"method": "GET"
+			},
+			{
+				"id": "35991c85-110a-4271-9469-2185c5aa1f6c",
+				"method": "GET"
+			},
+			{
+				"id": "ad53867e-ff5d-47b6-b11d-da573c674472",
+				"method": "GET"
+			},
+			{
+				"id": "57301ff9-c72a-4979-85da-2cb83555e517",
+				"method": "GET"
+			},
+			{
+				"id": "96395830-858a-4d01-9dfb-4366de2fe69f",
+				"method": "GET"
+			},
+			{
+				"id": "39a7169c-3982-42bd-80e9-d9e70b5ac0f2",
+				"method": "POST"
+			},
+			{
+				"id": "79a2f331-1136-4eb9-83fa-21f2930bbcd5",
+				"method": "POST"
+			},
+			{
+				"id": "b874e320-56d1-4292-878f-a5d10817a700",
+				"method": "POST"
+			},
+			{
+				"id": "ad098cc8-e4c7-4e9a-84c9-f1852507f13f",
+				"method": "PATCH"
+			},
+			{
+				"id": "377875db-12c7-4a05-8812-45620f2c99fa",
+				"method": "PATCH"
+			},
+			{
+				"id": "257fc4c4-3961-47a3-93ca-37707039da9d",
+				"method": "DELETE"
+			},
+			{
+				"id": "41dd7fe7-639b-4795-a138-2bfd307e2bcd",
+				"method": "GET"
+			},
+			{
+				"id": "7ab39dda-8ad8-4d17-b01f-e4973274d8ed",
+				"method": "GET"
+			},
+			{
+				"id": "7efebc00-d27e-46e1-ac05-0dd60a330245",
+				"method": "POST"
+			},
+			{
+				"id": "a845366d-ff8b-4167-b18e-5edf0156edf8",
+				"method": "POST"
+			},
+			{
+				"id": "258377a7-8802-45ec-850f-62772fcf907e",
+				"method": "POST"
+			},
+			{
+				"id": "ec60c57c-996a-4fb8-8fc2-905026aab9eb",
+				"method": "POST"
+			},
+			{
+				"id": "c078a988-c88a-425f-8518-a0a91c9020da",
+				"method": "POST"
+			},
+			{
+				"id": "91306069-0651-4a26-a751-6dd50adfcf84",
+				"method": "POST"
+			},
+			{
+				"id": "7d325338-1455-47c4-ae09-a03e486f8db3",
+				"method": "POST"
+			}
+		]
+	}
+}
