@@ -30,7 +30,38 @@ const { resultadosPaginados } = require('../routes/libros');
  *              libros: [6242c4d343de650304df4c9a, 6242c51043de650304df4ca0]
  */
 
-// CASO DE USO: Un usuario sin estar autentificado debe poder ver todas las categorías existentes
+/**
+ * @swagger
+ * /api/categorias:
+ *  get:
+ *      summary: Obtener un listado de las categorías por paginación
+ *      tags: [Categorias]
+ *      parameters:
+ *          - in: query
+ *            name: limit
+ *            schema:
+ *              type: integer
+ *            description: Número de recursos a mostrar
+ *          - in: query
+ *            name: offset
+ *            schema:
+ *              type: integer
+ *            description: Número de items a saltar antes de empezar a mostrar la colección    
+ *      responses:
+ *          200:
+ *          500:
+ *              description: Error del servidor
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Error'
+ *                      examples:
+ *                          cod6:
+ *                              summary: Código de error 6
+ *                              value:
+ *                                  error: 6
+ *                                  mensaje: Error del servidor
+ */
 router.get('/', resultadosPaginados(Categoria), async function(pet, resp) {
     resp.status(200);
     resp.setHeader('Content-Type', 'application/json');
@@ -52,15 +83,47 @@ router.get('/', resultadosPaginados(Categoria), async function(pet, resp) {
  *            description: ID de la categoría
  *      responses:
  *          200:
- *            description: OK
+ *            description: Ok
  *            contents:
  *              application/json:
  *                  schema:
  *                      $ref: '#/components/schemas/Categoria'
- *          404:
- *            description: Recurso no encontrado
  *          400:
- *            description: ¿Cuál es el error?
+ *              description: Datos incorrectos o falta algún campo
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Error'
+ *                      examples:
+ *                          cod2:
+ *                              summary: Código de error 2
+ *                              value:
+ *                                  error: 2
+ *                                  mensaje: No es un ID válido (longitud de 24 en hexadecimal)
+ *          404:
+ *              description: Recurso no encontrado
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Error'
+ *                      examples:
+ *                          cod1:
+ *                              summary: Código de error 1
+ *                              value:
+ *                                  error: 1
+ *                                  mensaje: Recurso no encontrado
+ *          500:
+ *              description: Error del servidor
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Error'
+ *                      examples:
+ *                          cod6:
+ *                              summary: Código de error 6
+ *                              value:
+ *                                  error: 6
+ *                                  mensaje: Error del servidor
  */
 router.get('/:id', getCategoria, function(pet, resp) {
     resp.status(200);

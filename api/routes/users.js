@@ -45,7 +45,85 @@ const User = require('../models/user');
  *              libros: [6242c4d343de650304df4c9a, 6242c51043de650304df4ca0, 6242c67843de650304df4cc1, 6242c6eb43de650304df4cc7, 6282c682a9bc42cd87d5285f]
  */
 
-// CASO DE USO: Un usuario debe poder crearse una cuenta
+/**
+ * @swagger
+ * /api/users:
+ *  post:
+ *      summary: Crear usuario
+ *      tags: [Users]
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          nombre:
+ *                              type: string
+ *                              example: Rebeca Pérez
+ *                          username:
+ *                              type: string
+ *                              example: rebeperez90
+ *                          email:
+ *                              type: string
+ *                              example: rebeperez90@gmail.com
+ *                          password:
+ *                              type: string
+ *                              example: 123456
+ *                      required:
+ *                          - nombre
+ *                          - username
+ *                          - email
+ *                          - password 
+ *      responses:
+ *          201:
+ *              description: Ok
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/User'
+ *          400:
+ *              description: Datos incorrectos o falta algún campo
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Error'
+ *                      examples:
+ *                          cod4:
+ *                              summary: Código de error 4
+ *                              value:
+ *                                  error: 4
+ *                                  mensaje: Falta algún campo por rellenar
+ *          409:
+ *              description: Conflicto
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Error'
+ *                      examples:
+ *                          cod9:
+ *                              summary: Código de error 9
+ *                              value:
+ *                                  error: 9
+ *                                  mensaje: El username ya existe
+ *                          cod10:
+ *                              summary: Código de error 10
+ *                              value:
+ *                                  error: 10
+ *                                  mensaje: El email ya existe
+ *          500:
+ *              description: Error del servidor
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Error'
+ *                      examples:
+ *                          cod6:
+ *                              summary: Código de error 6
+ *                              value:
+ *                                  error: 6
+ *                                  mensaje: Error del servidor
+ */
 router.post('/', async(pet, resp) => {
     if(!pet.body.nombre || !pet.body.username || !pet.body.password
         || !pet.body.email) {
@@ -107,7 +185,64 @@ router.post('/', async(pet, resp) => {
     }
 });
 
-// CASO DE USO: Un usuario sin estar autentificado debe poder ver el perfil de otro usuario
+/**
+ * @swagger
+ * /api/users/{username}:
+ *  get:
+ *      summary: Obtener usuario por username
+ *      tags: [Users]
+ *      parameters:
+ *          - in: path
+ *            name: username
+ *            schema:
+ *              type: string
+ *            required: true
+ *            description: Username del usuario
+ *      responses:
+ *          200:
+ *              description: OK
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              nombre:
+ *                                  type: string
+ *                                  example: Daniel Moreno
+ *                              username:
+ *                                  type: string
+ *                                  example: danimoreno94
+ *                              email:
+ *                                  type: string
+ *                                  example: danimorenog_94@hotmail.com
+ *                              libros:
+ *                                  type: array
+ *                                  example: [6242c4d343de650304df4c9a, 6242c51043de650304df4ca0]
+ *          404:
+ *              description: Recurso no encontrado
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Error'
+ *                      examples:
+ *                          cod1:
+ *                              summary: Código de error 1
+ *                              value:
+ *                                  error: 1
+ *                                  mensaje: Recurso no encontrado
+ *          500:
+ *              description: Error del servidor
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Error'
+ *                      examples:
+ *                          cod6:
+ *                              summary: Código de error 6
+ *                              value:
+ *                                  error: 6
+ *                                  mensaje: Error del servidor
+ */
 router.get('/:username', getUserByUsername, async(pet, resp, next) => {
     resp.status(200);
     resp.setHeader('Content-Type', 'application/json');

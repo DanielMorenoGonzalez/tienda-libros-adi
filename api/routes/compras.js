@@ -40,21 +40,6 @@ const { chequeaJWT } = require("../utils/auth");
  *              comprador: 627e0c45a5b4f89db9f0cac5
  *              libro: 6242c55e43de650304df4ca6
  *              valoracion: 5
- *      Error:
- *          type: object
- *          properties:
- *              error:
- *                  type: integer
- *                  description: Código de error
- *              mensaje:
- *                  type: string
- *                  description: Mensaje descriptivo del error
- *              required:
- *                  - error
- *                  - mensaje
- *          example:
- *              error: 6
- *              mensaje: Error del servidor
  */
 
 /**
@@ -104,18 +89,56 @@ const { chequeaJWT } = require("../utils/auth");
  *                  application/json:
  *                      schema:
  *                          $ref: '#/components/schemas/Error'
+ *                      examples:
+ *                          cod4:
+ *                              summary: Código de error 4
+ *                              value:
+ *                                  error: 4
+ *                                  mensaje: Falta algún campo por rellenar
+ *                          cod8:
+ *                              summary: Código de error 8
+ *                              value:
+ *                                  error: 8
+ *                                  mensaje: No es un número
+ *                          cod3:
+ *                              summary: Código de error 3
+ *                              value:
+ *                                  error: 3
+ *                                  mensaje: Valoración no válida. Debe estar entre 1 y 5
+ *                          cod13:
+ *                              summary: Código de error 13
+ *                              value:
+ *                                  error: 13
+ *                                  mensaje: El libro no pertenece al vendedor
+ *                          cod14:
+ *                              summary: Código de error 14
+ *                              value:
+ *                                  error: 14
+ *                                  mensaje: El libro no está disponible a la venta
  *          403:
  *              description: No tienes permisos
  *              content:
  *                  application/json:
  *                      schema:
  *                          $ref: '#/components/schemas/Error'
+ *                      examples:
+ *                          cod12:
+ *                              summary: Código de error 12
+ *                              value:
+ *                                  error: 12
+ *                                  mensaje: No tienes permisos
  *          500:
  *              description: Error del servidor
  *              content:
  *                  application/json:
  *                      schema:
  *                          $ref: '#/components/schemas/Error'
+ *                      examples:
+ *                          cod6:
+ *                              summary: Código de error 6
+ *                              value:
+ *                                  error: 6
+ *                                  mensaje: Error del servidor
  */
 router.post('/', chequeaJWT, async function(pet, resp) {
     var puntuacion = parseInt(pet.body.valoracion);
